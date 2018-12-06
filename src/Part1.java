@@ -50,6 +50,7 @@ public class Part1 extends AbstractChecker {
 	 * @return
 	 */
 	protected Set<State> satSetProp(LTS model, TFormula.Proposition phi) {
+		System.out.println("Computing Satisfaciton Set");
 		Set<State> res = new HashSet<State>();
 		for(State s: model) {
 			if(s.satisfies(phi))
@@ -63,7 +64,8 @@ public class Part1 extends AbstractChecker {
 	 */
 	@Override
 	public boolean solve(LTS model, TFormula tform, int bound) {
-		System.out.println(model);
+		System.out.println("Solving");
+		// System.out.println(model);
 		return false;
 	}
 
