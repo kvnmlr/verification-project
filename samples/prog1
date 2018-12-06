@@ -1,0 +1,10 @@
+
+//Simple increment
+int x;
+
+// Satisfies this one
+property test = E F x==10;
+
+while(x < 10) {
+  tau{= x=x+1 =}
+}
