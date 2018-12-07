@@ -1,0 +1,12 @@
+
+bool x = false;
+bool y = false;
+bool xprev = false;
+
+// Vermutlich falsch
+property prop = A(((!x && y && A X y) || x) && ((!x && !y && A X y) || x));
+
+do{
+    :: when(!xprev & x) tau{= y=true, xprev=x =}
+    :: tau{= xprev=x, y=false =}
+};
