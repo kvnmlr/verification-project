@@ -3,7 +3,7 @@
 int x;
 
 // Satisfies this one
-property test = E F x==10;
+property test = A F A ((x<5)U(x>4));
 
 while(x < 10) {
   tau{= x=x+1 =}

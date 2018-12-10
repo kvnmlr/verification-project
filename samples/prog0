@@ -1,8 +1,8 @@
 //Simple program to demonstrate usage of assignement
 
 int x;
-property t = (((x==1) || (x==2))) && !(x<1);
+property t = A ((true)U(x==2));
 
-tau{= x=3 =};
+tau{= x=1 =};
 tau{= x=2 =};
-tau{= x=1 =}
+tau{= x=3 =};

@@ -3,10 +3,27 @@ bool x = false;
 bool y = false;
 bool xprev = false;
 
-// Vermutlich falsch
-property prop = A(((!x && y && A X y) || x) && ((!x && !y && A X y) || x));
+// For all paths, globally either
+//    1. x is false and y is true, then y stays true in all paths in the next state
+//    2. x is false and y is false, then y stays false in all paths in the next state
+//    3. x is true (and y may change in the next state)
+
+property prop = A G (((!x && y && A X y) || (!x && !y && A X (!y))) || x);
+// property prop = A G (x | (!x));
 
 do{
-    :: when(!xprev & x) tau{= y=true, xprev=x =}
-    :: tau{= xprev=x, y=false =}
+    ::when(!xprev & x) {
+        alt{
+            ::tau{= y=!y, xprev=true, x=true =};
+            ::tau{= y=!y, xprev=true, x=false =}
+        }
+    }
+    ::when(xprev | (!x)) {
+        alt{
+            ::tau{= xprev=x, x=true =};
+            ::tau{= xprev=x, x=false =}
+        }
+    }
 };
+
+
