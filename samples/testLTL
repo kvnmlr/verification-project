@@ -5,7 +5,7 @@ bool z;
 bool b;
 
 // Should satisfy:
-property ForAutomaton = (a U z & b U z);
+property ForAutomaton = a U z & b U z;
 
 do{
 
