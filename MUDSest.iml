@@ -6,21 +6,32 @@
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output url="file://$MODULE_DIR$/bin" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
+    <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
+    <orderEntry type="module-library" exported="">
       <library name="antlr-4.7.1-complete.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/dependencies/antlr-4.7.1-complete.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/dependencies/owl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/dependencies/owl.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
