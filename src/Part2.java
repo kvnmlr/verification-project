@@ -26,7 +26,15 @@ public class Part2 extends AbstractChecker {
 	 * For ease of use, the answers to both questions correspond to the number of generated states (even if not reachable/coreachable).
 	 */
 	public int nbStatesBb(TFormula tform) {
-		return 0;
+		NBA aphi = null;
+		try {
+			aphi = new NBA(tform);
+		} catch (NotSupportedFormula notSupportedFormula) {
+			notSupportedFormula.printStackTrace();
+		}
+		int numberOfStates = aphi.aut.getNumberOfStates();
+		return numberOfStates
+				;
 	}
 	
 	public int nbStatesCl(TFormula tform) {
@@ -49,6 +57,8 @@ public class Part2 extends AbstractChecker {
 		try {
 			// Demonstration of the helper tools here, you are not forced to use them:
 			NBA aphi = new NBA(tform);
+			System.out.println("automaton has number of states: " + nbStatesBb(tform));
+
 			System.out.println("automaton starts in" + aphi.aut.getStoredHeader().getStartStates());
 			for( StoredState state: aphi.aut.getStoredStates()) {
 				System.out.println("Description of state " + state.getStateId());

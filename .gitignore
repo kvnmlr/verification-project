@@ -14,4 +14,6 @@ MudsestParser$DclContext.class
 MudsestParser.class
 MudsestParser.java
 MudsestParser$*.class
+.idea/encodings.xml
+.idea/workspace.xml
 
