@@ -204,6 +204,70 @@ public class Part2 extends AbstractChecker {
                 return super.iterator();
             }
         };
+        HashMap<State,State> ltsStateMap = new HashMap<>();
+        HashMap<State,StoredState> nbaStateMap = new HashMap<>();
+
+        for (State initTS : model.initialStates) {
+            for (Integer initNBA : nba.aut.getStoredHeader().getStartStates().get(0)) {
+                for (StoredEdgeWithLabel edge : nba.aut.getEdgesWithLabel(initNBA)) {
+                    if (initTS.satisfies(nba.propOfLabel(edge.getLabelExpr()))) {
+                        for(Integer nbaSucc : edge.getConjSuccessors()) {
+                            State prodState = new State() {
+                                @Override
+                                public Iterator<Transition> iterator() {
+                                    return null;
+                                }
+
+                                @Override
+                                public boolean satisfies(TFormula.Proposition prop) {
+                                    return nba.propOfLabel(edge.getLabelExpr()).equals(prop);
+                                }
+                            };
+                            product.initialStates.add(prodState);
+                            ltsStateMap.put(prodState, initTS);
+                            nbaStateMap.put(prodState, nba.aut.getStoredState(nbaSucc));
+                        }
+                    }
+
+                }
+            }
+        }
+        State terminal = new State() {
+            @Override
+            public Iterator<Transition> iterator() {
+                LinkedList<Transition> list = new LinkedList<>();
+
+                Transition trans = new Transition(this);
+                list.add(trans);
+                return list.iterator();
+            }
+
+            @Override
+            public boolean satisfies(TFormula.Proposition prop) {
+                return true;
+            }
+        };
+        for(State s : product){
+            if(!(s.iterator().hasNext())){
+                State copy = s;
+                s = new State() {
+                    @Override
+                    public Iterator<Transition> iterator() {
+                        LinkedList<Transition> list = new LinkedList<>();
+
+                        Transition trans = new Transition(terminal);
+                        list.add(trans);
+                        return list.iterator();
+                    }
+
+                    @Override
+                    public boolean satisfies(TFormula.Proposition prop) {
+                        return copy.satisfies(prop);
+                    }
+                };
+            }
+
+        }
         return model; // obviously wrong
     }
 
