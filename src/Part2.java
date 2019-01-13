@@ -161,58 +161,52 @@ public class Part2 extends AbstractChecker {
     }
 
     public int nbStatesCl(TFormula tform) {
-        return 0;
+        /*
+         __Closure:__
+         cl(phi) = {a, !a, b, !b, z, !z, (aUz), (bUz), !(aUz), !(bUz)}
+
+         __Elementary Sets:__
+         {phi, aUz, bUz, z, a, b}
+         {phi, aUz, bUz, z, !a, b}
+         {phi, aUz, bUz, z, a, !b}
+         {phi, aUz, bUz, z, !a, !b}
+
+         {!phi, (aUz), !(bUz), !z, a, b}
+         {!phi, (aUz), !(bUz), !z, a, !b}
+         {!phi, (aUz), !(bUz), !z, !a, b}
+         {!phi, (aUz), !(bUz), !z, !a, !b}
+
+         {!phi, !(aUz), (bUz), !z, a, b}
+         {!phi, !(aUz), (bUz), !z, a, !b}
+         {!phi, !(aUz), (bUz), !z, !a, b}
+         {!phi, !(aUz), (bUz), !z, !a, !b}
+
+         {!phi, !(aUz), !(bUz), !z, a, b}
+         {!phi, !(aUz), !(bUz), !z, a, !b}
+         {!phi, !(aUz), !(bUz), !z, !a, b}
+         {!phi, !(aUz), !(bUz), !z, !a, !b}
+         */
+        return 17;
     }
 
     /**
      * Question c
      */
     public LTS product(LTS model, TFormula tform, TFormula.Proposition af) {
+        NBA nba;
         try {
-            NBA nba = new NBA(tform);
-
-            List<State> states = new ArrayList<>();
-
-            for (State smodel : model) {
-                for (StoredState sform : nba.aut.getStoredStates()) {
-                    State s = new State() {
-                        @Override
-                        public Iterator<Transition> iterator() {
-                            return null;
-                        }
-
-                        @Override
-                        public boolean satisfies(TFormula.Proposition prop) {
-                            BooleanExpression<AtomLabel> labelExpr = sform.getLabelExpr();
-                            TFormula.Proposition propOfLabel = nba.propOfLabel(labelExpr);
-
-                            return smodel.satisfies(propOfLabel);
-                        }
-                    };
-
-                    states.add(s);
-                }
-            }
-
-            for (State initialState : model.initialStates) {
-                for (Transition trans : initialState) {
-
-                }
-
-
-            }
-
-            LTS product = new LTS() {
-                @Override
-                public Iterator<State> iterator() {
-                    return super.iterator();
-                }
-            };
-
-
+            nba = new NBA(tform);
         } catch (NotSupportedFormula notSupportedFormula) {
             notSupportedFormula.printStackTrace();
+            return null;
         }
+
+        LTS product = new LTS() {
+            @Override
+            public Iterator<State> iterator() {
+                return super.iterator();
+            }
+        };
         return model; // obviously wrong
     }
 
@@ -222,6 +216,8 @@ public class Part2 extends AbstractChecker {
      */
     @Override
     public boolean solve(LTS model, TFormula tform, int bound) {
+        System.out.println("automaton has number of elementary sets: " + nbStatesCl(tform));
+
         try {
             // Demonstration of the helper tools here, you are not forced to use them:
             NBA aphi = new NBA(tform);
