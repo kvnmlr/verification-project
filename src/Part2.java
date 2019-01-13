@@ -170,23 +170,20 @@ public class Part2 extends AbstractChecker {
          {phi, aUz, bUz, z, !a, b}
          {phi, aUz, bUz, z, a, !b}
          {phi, aUz, bUz, z, !a, !b}
+         {phi, aUz, bUz, !z, a, b}
 
-         {!phi, (aUz), !(bUz), !z, a, b}
-         {!phi, (aUz), !(bUz), !z, a, !b}
-         {!phi, (aUz), !(bUz), !z, !a, b}
-         {!phi, (aUz), !(bUz), !z, !a, !b}
-
-         {!phi, !(aUz), (bUz), !z, a, b}
-         {!phi, !(aUz), (bUz), !z, a, !b}
-         {!phi, !(aUz), (bUz), !z, !a, b}
-         {!phi, !(aUz), (bUz), !z, !a, !b}
+         {!phi, !(aUz), bUz, !z, a, b}
+         {!phi, !(aUz), bUz, !z, !a, b}
 
          {!phi, !(aUz), !(bUz), !z, a, b}
-         {!phi, !(aUz), !(bUz), !z, a, !b}
          {!phi, !(aUz), !(bUz), !z, !a, b}
+         {!phi, !(aUz), !(bUz), !z, a, !b}
          {!phi, !(aUz), !(bUz), !z, !a, !b}
+
+         {!phi, aUz, !(bUz), !z, a, b}
+         {!phi, aUz, !(bUz), !z, a, !b}
          */
-        return 17;
+        return 13;
     }
 
     /**
@@ -216,6 +213,8 @@ public class Part2 extends AbstractChecker {
      */
     @Override
     public boolean solve(LTS model, TFormula tform, int bound) {
+        System.out.println(tform.toString());
+
         System.out.println("automaton has number of elementary sets: " + nbStatesCl(tform));
 
         try {
