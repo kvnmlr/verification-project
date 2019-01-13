@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="931c4051-795f-4e2c-88a9-089cc246eecf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/samples/cyclecheckTest" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samples/trafficlight" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samples/triangular" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MUDSest.jar" beforeDir="false" afterPath="$PROJECT_DIR$/MUDSest.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Part2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Part2.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -35,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Part2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="267" column="13" lean-forward="true" selection-start-line="267" selection-start-column="13" selection-end-line="267" selection-end-column="13" />
+            <state relative-caret-position="313">
+              <caret line="132" column="46" selection-start-line="132" selection-start-column="46" selection-end-line="132" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#7085#7231#0" expanded="true" />
@@ -53,6 +57,33 @@
                 <element signature="e#9159#9325#0" expanded="true" />
                 <element signature="e#9324#9325#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/samples/trafficlight">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="29" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/samples/triangular">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret selection-end-line="16" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/samples/cyclecheckTest">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret selection-end-line="12" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -79,7 +110,7 @@
         <entry file="file://$PROJECT_DIR$/samples/testLTL">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+              <caret line="7" column="21" selection-start-line="7" selection-end-line="7" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -88,7 +119,7 @@
         <entry file="file://$PROJECT_DIR$/src/mudschecker/LTS.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="17" column="43" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="43" />
+              <caret line="17" column="43" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -118,14 +149,16 @@
         <option value="$PROJECT_DIR$/src/Part1.java" />
         <option value="$PROJECT_DIR$/samples/testLTL" />
         <option value="$PROJECT_DIR$/src/Part2.java" />
+        <option value="$PROJECT_DIR$/samples/triangular" />
+        <option value="$PROJECT_DIR$/samples/cyclecheckTest" />
+        <option value="$PROJECT_DIR$/samples/trafficlight" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1912" />
-    <option name="y" value="-8" />
-    <option name="width" value="1440" />
-    <option name="height" value="780" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1913" />
+    <option name="width" value="1324" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -160,7 +193,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547399487909" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547408865263" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../muds-project-master" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -247,7 +280,7 @@
     <configuration name="Sample" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="MudsMain" />
       <module name="MUDSest" />
-      <option name="PROGRAM_PARAMETERS" value="testLTL" />
+      <option name="PROGRAM_PARAMETERS" value="trafficlight" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -309,7 +342,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63750000" />
+    <option name="totallyTimeSpent" value="69700000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -321,10 +354,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1913" y="0" width="1324" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16044776" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12895569" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -333,13 +366,13 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.33261105" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3358862" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39934355" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.3286334" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3286334" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32827735" />
@@ -585,13 +618,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/samples/testLTL">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/dependencies/owl.jar!/jhoafparser/storage/StoredHeader.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="384">
@@ -616,14 +642,21 @@
     <entry file="file://$PROJECT_DIR$/src/mudschecker/LTS.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="17" column="43" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="43" />
+          <caret line="17" column="43" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/testLTL">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="21" selection-start-line="7" selection-end-line="7" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Part2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="267" column="13" lean-forward="true" selection-start-line="267" selection-start-column="13" selection-end-line="267" selection-end-column="13" />
+        <state relative-caret-position="313">
+          <caret line="132" column="46" selection-start-line="132" selection-start-column="46" selection-end-line="132" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#7085#7231#0" expanded="true" />
@@ -637,6 +670,27 @@
             <element signature="e#9159#9325#0" expanded="true" />
             <element signature="e#9324#9325#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/triangular">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="16" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/cyclecheckTest">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="12" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/trafficlight">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="29" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
         </state>
       </provider>
     </entry>

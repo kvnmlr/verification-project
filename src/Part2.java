@@ -37,6 +37,7 @@ public class Part2 extends AbstractChecker {
             if (!witness.isEmpty()) {
                 break;
             }
+            System.out.println(initial.hashCode());
             List<State> trace = new ArrayList<>();  // Trace of the current DFS run (i.e. list of explored states)
             DFS(initial, outerVisitingSet, innerVisitingSet, prop, trace, witness);
         }
@@ -44,7 +45,9 @@ public class Part2 extends AbstractChecker {
         if (witness.isEmpty()) {
             return null;
         }
-
+        for(State s : witness){
+            System.out.println(s.hashCode());
+        }
         return witness;
     }
 
@@ -60,12 +63,15 @@ public class Part2 extends AbstractChecker {
      * @return false iff a cycle or a terminal state is found from the current start state
      */
     private boolean DFS(State startState, Set<State> outerVisitingSet, Set<State> innerVisitingSet, TFormula.Proposition prop, List<State> trace, List<State> witness) {
+        System.out.println("Starting outer DFS");
         if (!witness.isEmpty()) {
+            System.out.println("Witness is empty");
             // If the program is correct, this should not happen
             return false;
         }
 
         if (!startState.iterator().hasNext()) {
+            System.out.println("Terminal state has been found");
             // Found a terminal state
             return false;
         }
@@ -73,21 +79,24 @@ public class Part2 extends AbstractChecker {
         trace.add(startState);
         if (!outerVisitingSet.contains(startState)) {
             outerVisitingSet.add(startState);
-
+            System.out.println(startState.hashCode());
             for (Transition trans : startState) {
                 State post = trans.target;
+                System.out.println("Before recursive DFS call: " + post.hashCode());
                 // TODO not sure if this is correct. If the DFS returns false (i.e. cycle discovered) we return all recursive calls with false
                 if (!DFS(post, outerVisitingSet, innerVisitingSet, prop, new ArrayList<>(trace), witness)) {
+                    System.out.println("DFS is not true for successors");
                     return false;
                 }
             }
 
             if (!startState.satisfies(prop)) {
+                System.out.println("About to call cyclecheck for state:" + startState.hashCode());
                 Stack<State> cycle = cycleCheck(startState, innerVisitingSet);
                 if (cycle != null) {
                     // Construct the witness given the trace and the cycle
                     witness.addAll(trace);
-                    cycle.pop();            // start state has already been added to trace
+                    witness.remove(witness.size()-1);// start state has already been added to trace
                     witness.addAll(cycle);  // adds states in the order they have been pushed to the stack
                     return false;
                 }
@@ -111,9 +120,11 @@ public class Part2 extends AbstractChecker {
         Stack<State> stack = new Stack<>();
 
         stack.push(startState);
+        System.out.println("Entered CC with state and pushed to stack: " + startState.hashCode());
         innerVisitingSet.add(startState);
 
         while (!stack.isEmpty()) {
+            System.out.println("Stack not empty");
             State nextState = stack.peek();
 
             // If the start state is in the post set of the next state
@@ -312,8 +323,8 @@ public class Part2 extends AbstractChecker {
                 }
             });
 
-            LTS product = product(model, tform, propTrue);
-            return (persistenceWit(product, propTrue, bound) != null);
+            //LTS product = product(model, tform, propTrue);
+            return (persistenceWit(model, (TFormula.Proposition )tform , bound) != null);
 
         } catch (NotSupportedFormula e) {
             return false; // Not LTL

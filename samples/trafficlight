@@ -1,0 +1,16 @@
+int id = 0;
+
+bool red = false;
+bool yellow = false;
+
+property ForAutomaton = false;
+
+do{
+    ::when(id == 0) tau{= id = 1, yellow = true =}
+    ::when(id == 1) tau{= id = 2, red = true , yellow = false =}
+    ::when(id == 2) tau{= id = 3, red = false =}
+    ::when(id == 3) tau{= id = 0  =}
+
+ // ::when(id == 4) tau{= =}
+ // ::when(id == 2) tau{= id = 1, b = true, a = false =}
+}

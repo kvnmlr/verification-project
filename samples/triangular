@@ -1,0 +1,17 @@
+int id = 0;
+
+bool a = false;
+bool b = false;
+
+property ForAutomaton = a;
+
+do{
+  ::when(id == 0) tau{= id = 1, a = true =}
+//  ::when(id == 2) tau{= id = 0, a = false =}
+  ::when(id == 1) tau{= id = 3, a = true, b = false =}
+  ::when(id == 3) tau{= id = 2 , a = false =}
+  ::when(id == 3) tau{= id = 0 , a = false =}
+  ::when(id == 2) tau{= id = 4 , a = true =}
+  ::when(id == 4) tau{= =}
+ // ::when(id == 2) tau{= id = 1, b = true, a = false =}
+}
