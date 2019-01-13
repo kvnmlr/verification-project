@@ -17,9 +17,131 @@ public class Part2 extends AbstractChecker {
 
     /**
      * Question a
+     *
+     * @param model The model
+     * @param prop  The property
+     * @param bound The bound on the model state space
+     * @return The witness iff one exists or null otherwise or if the model has more than @bound states or a
+     * terminal state is found during exploration (TODO)
      */
     public List<State> persistenceWit(LTS model, TFormula.Proposition prop, int bound) {
-        return Collections.emptyList(); // obviously wrong
+        Set<State> outerVisitingSet = new HashSet<>();
+        Set<State> innerVisitingSet = new HashSet<>();
+        List<State> witness = new ArrayList<>();
+
+        if (!checkBounded(model, bound)) {
+            return null;
+        }
+
+        for (State initial : model.initialStates) {
+            if (!witness.isEmpty()) {
+                break;
+            }
+            List<State> trace = new ArrayList<>();  // Trace of the current DFS run (i.e. list of explored states)
+            DFS(initial, outerVisitingSet, innerVisitingSet, prop, trace, witness);
+        }
+
+        if (witness.isEmpty()) {
+            return null;
+        }
+
+        return witness;
+    }
+
+    /**
+     * Implements the outer DFS to encounter reachable states
+     *
+     * @param startState       The start state from where to continue exploring
+     * @param outerVisitingSet The global visiting set of the outer DFS
+     * @param innerVisitingSet The global visiting set of the inner DFS
+     * @param prop             The proposition (a)
+     * @param trace            The trace up to the current start state
+     * @param witness          The global witness
+     * @return false iff a cycle or a terminal state is found from the current start state
+     */
+    private boolean DFS(State startState, Set<State> outerVisitingSet, Set<State> innerVisitingSet, TFormula.Proposition prop, List<State> trace, List<State> witness) {
+        if (!witness.isEmpty()) {
+            // If the program is correct, this should not happen
+            return false;
+        }
+
+        if (!startState.iterator().hasNext()) {
+            // Found a terminal state
+            return false;
+        }
+
+        trace.add(startState);
+        if (!outerVisitingSet.contains(startState)) {
+            outerVisitingSet.add(startState);
+
+            for (Transition trans : startState) {
+                State post = trans.target;
+                // TODO not sure if this is correct. If the DFS returns false (i.e. cycle discovered) we return all recursive calls with false
+                if (!DFS(post, outerVisitingSet, innerVisitingSet, prop, new ArrayList<>(trace), witness)) {
+                    return false;
+                }
+            }
+
+            if (!startState.satisfies(prop)) {
+                Stack<State> cycle = cycleCheck(startState, innerVisitingSet);
+                if (cycle != null) {
+                    // Construct the witness given the trace and the cycle
+                    witness.addAll(trace);
+                    cycle.pop();            // start state has already been added to trace
+                    witness.addAll(cycle);  // adds states in the order they have been pushed to the stack
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * The innter DFS that checks for a cycle from a given start state.
+     * This should be an exact implementation of the CYCLE_CHECK(s) algorithm
+     *
+     * @param startState       the start state of the cycle
+     * @param innerVisitingSet the set of explored states
+     * @return A non-null stack containing the loop states if a loop was discovered, null otherwise
+     */
+    private Stack<State> cycleCheck(State startState, Set<State> innerVisitingSet) {
+        if (innerVisitingSet == null) {
+            innerVisitingSet = new HashSet<>();
+        }
+        Stack<State> stack = new Stack<>();
+
+        stack.push(startState);
+        innerVisitingSet.add(startState);
+
+        while (!stack.isEmpty()) {
+            State nextState = stack.peek();
+
+            // If the start state is in the post set of the next state
+            for (Transition trans : nextState) {
+                State post = trans.target;
+                if (startState.equals(post)) {
+                    stack.push(startState);
+                    return stack;
+                }
+            }
+
+            // If the post set of the next state is not a true subset of the explored set
+            boolean foundUnexplored = false;
+            for (Transition trans : nextState) {
+                State post = trans.target;
+                if (!innerVisitingSet.contains(post)) {
+                    // choose the first post state that is not yet explored
+                    foundUnexplored = true;
+                    innerVisitingSet.add(post);
+                    stack.push(post);
+                }
+            }
+
+            if (!foundUnexplored) {
+                stack.pop();
+            }
+        }
+        return null;
     }
 
     /**
