@@ -197,11 +197,44 @@ public class Part2 extends AbstractChecker {
         return 13;
     }
 
+    private class StateEdit extends State{
+        public LinkedList<StateEdit> succ;
+
+        public StateEdit(){
+            LinkedList<StateEdit> succ = new LinkedList<>();
+        }
+
+        public LinkedList<StateEdit> getSucc() {
+            return succ;
+        }
+
+        public boolean isVisited = false;
+        public void setSucc(LinkedList<StateEdit> succ) {
+            this.succ = succ;
+        }
+
+        @Override
+        public Iterator<Transition> iterator() {
+            return null;
+        }
+
+        @Override
+        public boolean satisfies(TFormula.Proposition prop) {
+            return false;
+        }
+        public void setVisited(){
+            isVisited = true;
+        }
+        public boolean isVisited() {
+            return isVisited;
+        }
+    }
     /**
      * Question c
      */
     public LTS product(LTS model, TFormula tform, TFormula.Proposition af) {
         NBA nba;
+
         try {
             nba = new NBA(tform);
         } catch (NotSupportedFormula notSupportedFormula) {
@@ -217,13 +250,14 @@ public class Part2 extends AbstractChecker {
         };
         HashMap<State,State> ltsStateMap = new HashMap<>();
         HashMap<State,StoredState> nbaStateMap = new HashMap<>();
-
+        HashMap<State, ArrayList<State>> prodStateSucc = new HashMap<>();
+        ArrayList<StateEdit> initials = new ArrayList<>();
         for (State initTS : model.initialStates) {
             for (Integer initNBA : nba.aut.getStoredHeader().getStartStates().get(0)) {
                 for (StoredEdgeWithLabel edge : nba.aut.getEdgesWithLabel(initNBA)) {
                     if (initTS.satisfies(nba.propOfLabel(edge.getLabelExpr()))) {
                         for(Integer nbaSucc : edge.getConjSuccessors()) {
-                            State prodState = new State() {
+                            StateEdit prodState = new StateEdit() {
                                 @Override
                                 public Iterator<Transition> iterator() {
                                     return null;
@@ -234,7 +268,7 @@ public class Part2 extends AbstractChecker {
                                     return nba.propOfLabel(edge.getLabelExpr()).equals(prop);
                                 }
                             };
-                            product.initialStates.add(prodState);
+                            initials.add(prodState);
                             ltsStateMap.put(prodState, initTS);
                             nbaStateMap.put(prodState, nba.aut.getStoredState(nbaSucc));
                         }
@@ -243,6 +277,10 @@ public class Part2 extends AbstractChecker {
                 }
             }
         }
+
+
+            iterateProduct(initials, model, nba, ltsStateMap, nbaStateMap);
+
         State terminal = new State() {
             @Override
             public Iterator<Transition> iterator() {
@@ -282,6 +320,34 @@ public class Part2 extends AbstractChecker {
         return model; // obviously wrong
     }
 
+    private void iterateProduct(ArrayList<StateEdit> initials, LTS model, NBA nba, HashMap<State, State> ltsStateMap, HashMap<State, StoredState> nbaStateMap) {
+        for (StateEdit currentProdState : initials){
+        if(currentProdState.isVisited()){
+            return;
+        }
+        State currentTSState = ltsStateMap.get(currentProdState);
+        while(currentTSState.iterator().hasNext()) {
+
+            Transition currTSTrans = currentTSState.iterator().next();
+            State nextTSState = currTSTrans.target;
+            StoredState currentNBAState = nbaStateMap.get(currentProdState);
+            ArrayList<StoredEdgeWithLabel> edgeStorage = new ArrayList<>();
+            for (StoredEdgeWithLabel currNBATrans : nba.aut.getEdgesWithLabel(currentNBAState.getStateId())) {
+
+                if (nextTSState.satisfies(nba.propOfLabel(currNBATrans.getLabelExpr()))) {
+                    edgeStorage.add(currNBATrans);
+                }
+            }
+            for (StoredEdgeWithLabel edge : edgeStorage) {
+               
+
+            }
+
+
+        }
+        }
+    }
+
     /**
      * Question d : wrap it together
      * Bonus: don't return "false" for non-LTL formula and do the general model checking
@@ -302,6 +368,7 @@ public class Part2 extends AbstractChecker {
                 System.out.println("Description of state " + state.getStateId());
                 System.out.println("  Is accepting:" + !state.getAccSignature().isEmpty()); // There only one acceptance set, so the
                 //acceptance signature is always [] or [0] (the latter if accepting)
+
                 for (StoredEdgeWithLabel edge : aphi.aut.getEdgesWithLabel(state.getStateId())) {
                     System.out.println("  transition to " + edge.getConjSuccessors().get(0) + " under condition " + aphi.propOfLabel(edge.getLabelExpr()));
                 }
