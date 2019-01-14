@@ -1,5 +1,6 @@
 import java.util.*;
 
+import com.sun.jdi.BooleanValue;
 import helper.NBA;
 import helper.NotSupportedFormula;
 import jhoafparser.ast.AtomLabel;
@@ -9,6 +10,7 @@ import jhoafparser.storage.StoredState;
 import mudschecker.LTS;
 import mudschecker.State;
 import mudschecker.Transition;
+import mudspg.BoolVariable;
 import mudspg.Evaluation;
 import mudspg.Expression;
 import mudspg.TFormula;
@@ -275,7 +277,7 @@ public class Part2 extends AbstractChecker {
         Set<StateEdit> generatedStates = new HashSet<>();
 
         for (StateEdit s : initials) {
-            iterateProduct(s, nba, generatedStates);
+            iterateProduct(s, nba, generatedStates, af);
         }
 
         StateEdit terminal = new StateEdit() {
@@ -334,23 +336,32 @@ public class Part2 extends AbstractChecker {
         return ret;
     }
 
-    private void iterateProduct(StateEdit startState, NBA nba, Set<StateEdit> generatedStates) {
+    private void iterateProduct(StateEdit startState, NBA nba, Set<StateEdit> generatedStates, TFormula.Proposition af) {
         State currentTSState = startState.ltsState;
         while (currentTSState.iterator().hasNext()) {
             Transition currTSTrans = currentTSState.iterator().next();
             State nextTSState = currTSTrans.target;
             StoredState currentNBAState = startState.nbaState;
-            ArrayList<StoredEdgeWithLabel> edgeStorage = new ArrayList<>();
             for (StoredEdgeWithLabel currNBATrans : nba.aut.getEdgesWithLabel(currentNBAState.getStateId())) {
                 if (nextTSState.satisfies(nba.propOfLabel(currNBATrans.getLabelExpr()))) {
-                    edgeStorage.add(currNBATrans);
                     StateEdit state = new StateEdit();
+
+                    StoredState nbaSuccState = nba.aut.getStoredState(currNBATrans.getConjSuccessors().get(0));
+                    if (!nbaSuccState.getAccSignature().isEmpty()) {
+                        state = new StateEdit() {
+                            @Override
+                            public boolean satisfies(TFormula.Proposition prop) {
+                                return prop.equals(af);
+                            }
+                        };
+                    }
+
                     state.ltsState = nextTSState;
-                    state.nbaState = nba.aut.getStoredState(currNBATrans.getConjSuccessors().get(0));
+                    state.nbaState = nbaSuccState;
 
                     if (!generatedStates.contains(state)) {
                         startState.succ.add(state);
-                        iterateProduct(state, nba, generatedStates);
+                        iterateProduct(state, nba, generatedStates, af);
                     } else {
                         for (StateEdit s : generatedStates) {
                             if (s.equals(state)) {
@@ -398,15 +409,11 @@ public class Part2 extends AbstractChecker {
             if (!checkBounded(model, bound)) {
                 return false;
             }
-            TFormula.Proposition propTrue = new TFormula.Proposition(new Expression<>() {
-                @Override
-                public Boolean compute(Evaluation e) {
-                    return true;
-                }
-            });
 
-            //LTS product = product(model, tform, propTrue);
-            return (persistenceWit(model, (TFormula.Proposition) tform, bound) != null);
+            TFormula.Proposition freshProposition = new TFormula.Proposition(new BoolVariable("af"));
+            LTS product = product(model, tform, freshProposition);
+
+            return (persistenceWit(product, freshProposition, bound) != null);
 
         } catch (NotSupportedFormula e) {
             return false; // Not LTL
