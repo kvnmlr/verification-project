@@ -13,7 +13,41 @@ import mudspg.Evaluation;
 import mudspg.Expression;
 import mudspg.TFormula;
 
+
 public class Part2 extends AbstractChecker {
+
+    private class StateEdit extends State {
+        LinkedList<StateEdit> succ;
+        State ltsState;
+        StoredState nbaState;
+
+        StateEdit() {
+            this.succ = new LinkedList<>();
+        }
+
+        @Override
+        public Iterator<Transition> iterator() {
+            List<Transition> trans = new ArrayList<>();
+            for (StateEdit state : succ) {
+                Transition t = new Transition(state, null);
+                trans.add(t);
+            }
+            return trans.iterator();
+        }
+
+        @Override
+        public boolean satisfies(TFormula.Proposition prop) {
+            return ltsState.satisfies(prop);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof StateEdit)) {
+                return false;
+            }
+            return this.nbaState.equals(((StateEdit) other).nbaState) && this.ltsState.equals(((StateEdit) other).ltsState);
+        }
+    }
 
     /**
      * Question a
@@ -45,7 +79,7 @@ public class Part2 extends AbstractChecker {
         if (witness.isEmpty()) {
             return null;
         }
-        for(State s : witness){
+        for (State s : witness) {
             System.out.println(s.hashCode());
         }
         return witness;
@@ -96,7 +130,7 @@ public class Part2 extends AbstractChecker {
                 if (cycle != null) {
                     // Construct the witness given the trace and the cycle
                     witness.addAll(trace);
-                    witness.remove(witness.size()-1);// start state has already been added to trace
+                    witness.remove(witness.size() - 1);// start state has already been added to trace
                     witness.addAll(cycle);  // adds states in the order they have been pushed to the stack
                     return false;
                 }
@@ -197,38 +231,7 @@ public class Part2 extends AbstractChecker {
         return 13;
     }
 
-    private class StateEdit extends State{
-        public LinkedList<StateEdit> succ;
 
-        public StateEdit(){
-            LinkedList<StateEdit> succ = new LinkedList<>();
-        }
-
-        public LinkedList<StateEdit> getSucc() {
-            return succ;
-        }
-
-        public boolean isVisited = false;
-        public void setSucc(LinkedList<StateEdit> succ) {
-            this.succ = succ;
-        }
-
-        @Override
-        public Iterator<Transition> iterator() {
-            return null;
-        }
-
-        @Override
-        public boolean satisfies(TFormula.Proposition prop) {
-            return false;
-        }
-        public void setVisited(){
-            isVisited = true;
-        }
-        public boolean isVisited() {
-            return isVisited;
-        }
-    }
     /**
      * Question c
      */
@@ -242,21 +245,12 @@ public class Part2 extends AbstractChecker {
             return null;
         }
 
-        LTS product = new LTS() {
-            @Override
-            public Iterator<State> iterator() {
-                return super.iterator();
-            }
-        };
-        HashMap<State,State> ltsStateMap = new HashMap<>();
-        HashMap<State,StoredState> nbaStateMap = new HashMap<>();
-        HashMap<State, ArrayList<State>> prodStateSucc = new HashMap<>();
         ArrayList<StateEdit> initials = new ArrayList<>();
         for (State initTS : model.initialStates) {
             for (Integer initNBA : nba.aut.getStoredHeader().getStartStates().get(0)) {
                 for (StoredEdgeWithLabel edge : nba.aut.getEdgesWithLabel(initNBA)) {
                     if (initTS.satisfies(nba.propOfLabel(edge.getLabelExpr()))) {
-                        for(Integer nbaSucc : edge.getConjSuccessors()) {
+                        for (Integer succ : edge.getConjSuccessors()) {
                             StateEdit prodState = new StateEdit() {
                                 @Override
                                 public Iterator<Transition> iterator() {
@@ -268,9 +262,9 @@ public class Part2 extends AbstractChecker {
                                     return nba.propOfLabel(edge.getLabelExpr()).equals(prop);
                                 }
                             };
+                            prodState.ltsState = initTS;
+                            prodState.nbaState = nba.aut.getStoredState(succ);
                             initials.add(prodState);
-                            ltsStateMap.put(prodState, initTS);
-                            nbaStateMap.put(prodState, nba.aut.getStoredState(nbaSucc));
                         }
                     }
 
@@ -278,10 +272,13 @@ public class Part2 extends AbstractChecker {
             }
         }
 
+        Set<StateEdit> generatedStates = new HashSet<>();
 
-            iterateProduct(initials, model, nba, ltsStateMap, nbaStateMap);
+        for (StateEdit s : initials) {
+            iterateProduct(s, nba, generatedStates);
+        }
 
-        State terminal = new State() {
+        StateEdit terminal = new StateEdit() {
             @Override
             public Iterator<Transition> iterator() {
                 LinkedList<Transition> list = new LinkedList<>();
@@ -296,55 +293,73 @@ public class Part2 extends AbstractChecker {
                 return true;
             }
         };
-        for(State s : product){
-            if(!(s.iterator().hasNext())){
-                State copy = s;
-                s = new State() {
-                    @Override
-                    public Iterator<Transition> iterator() {
-                        LinkedList<Transition> list = new LinkedList<>();
 
-                        Transition trans = new Transition(terminal);
-                        list.add(trans);
-                        return list.iterator();
-                    }
-
-                    @Override
-                    public boolean satisfies(TFormula.Proposition prop) {
-                        return copy.satisfies(prop);
-                    }
-                };
+        for (StateEdit s : generatedStates) {
+            if (!(s.iterator().hasNext())) {
+                s.succ.add(terminal);
             }
-
         }
-        return model; // obviously wrong
+
+        List<State> initialState = toLTSStates(initials);
+        List<State> ltsStates = toLTSStates(new ArrayList<>(generatedStates));
+
+        LTS product = new LTS() {
+            public Collection<State> initialStates = initialState;
+
+            @Override
+            public Iterator<State> iterator() {
+                return ltsStates.iterator();
+            }
+        };
+
+        return product;
     }
 
-    private void iterateProduct(ArrayList<StateEdit> initials, LTS model, NBA nba, HashMap<State, State> ltsStateMap, HashMap<State, StoredState> nbaStateMap) {
-        for (StateEdit currentProdState : initials){
-        if(currentProdState.isVisited()){
-            return;
-        }
-        State currentTSState = ltsStateMap.get(currentProdState);
-        while(currentTSState.iterator().hasNext()) {
+    private List<State> toLTSStates(List<StateEdit> states) {
+        List<State> ret = new ArrayList<>();
+        for (StateEdit i : states) {
+            State s = new State() {
+                @Override
+                public Iterator<Transition> iterator() {
+                    return i.iterator();
+                }
 
+                @Override
+                public boolean satisfies(TFormula.Proposition prop) {
+                    return i.satisfies(prop);
+                }
+            };
+            ret.add(s);
+        }
+        return ret;
+    }
+
+    private void iterateProduct(StateEdit startState, NBA nba, Set<StateEdit> generatedStates) {
+        State currentTSState = startState.ltsState;
+        while (currentTSState.iterator().hasNext()) {
             Transition currTSTrans = currentTSState.iterator().next();
             State nextTSState = currTSTrans.target;
-            StoredState currentNBAState = nbaStateMap.get(currentProdState);
+            StoredState currentNBAState = startState.nbaState;
             ArrayList<StoredEdgeWithLabel> edgeStorage = new ArrayList<>();
             for (StoredEdgeWithLabel currNBATrans : nba.aut.getEdgesWithLabel(currentNBAState.getStateId())) {
-
                 if (nextTSState.satisfies(nba.propOfLabel(currNBATrans.getLabelExpr()))) {
                     edgeStorage.add(currNBATrans);
+                    StateEdit state = new StateEdit();
+                    state.ltsState = nextTSState;
+                    state.nbaState = nba.aut.getStoredState(currNBATrans.getConjSuccessors().get(0));
+
+                    if (!generatedStates.contains(state)) {
+                        startState.succ.add(state);
+                        iterateProduct(state, nba, generatedStates);
+                    } else {
+                        for (StateEdit s : generatedStates) {
+                            if (s.equals(state)) {
+                                startState.succ.add(s);
+                            }
+                        }
+                    }
                 }
             }
-            for (StoredEdgeWithLabel edge : edgeStorage) {
-               
-
-            }
-
-
-        }
         }
     }
 
@@ -391,7 +406,7 @@ public class Part2 extends AbstractChecker {
             });
 
             //LTS product = product(model, tform, propTrue);
-            return (persistenceWit(model, (TFormula.Proposition )tform , bound) != null);
+            return (persistenceWit(model, (TFormula.Proposition) tform, bound) != null);
 
         } catch (NotSupportedFormula e) {
             return false; // Not LTL
