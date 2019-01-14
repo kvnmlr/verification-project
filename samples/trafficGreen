@@ -3,10 +3,9 @@ int id = 0;
 bool green = false;
 
 
-property ForAutomaton = G E green;
+property ForAutomaton = G F green;
 
 do{
     ::when(id == 0) tau{= id = 1, green = true =}
     ::when(id == 1) tau{= id = 0, green = false =}
-
 }
