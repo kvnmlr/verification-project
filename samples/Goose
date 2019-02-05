@@ -1,0 +1,88 @@
+
+
+int player_pos = 0;
+int dice_result = 0;
+int number_of_actions = 0;
+
+property winning = G (player_pos != 63);
+
+do{
+    alt{
+        ::tau {= dice_result = 1 =}
+        ::tau {= dice_result = 2 =}
+        ::tau {= dice_result = 3 =}
+        ::tau {= dice_result = 4 =}
+        ::tau {= dice_result = 5 =}
+        ::tau {= dice_result = 6 =}
+        ::tau {= dice_result = 7 =}
+        ::tau {= dice_result = 8 =}
+        ::tau {= dice_result = 9 =}
+        ::tau {= dice_result = 10 =}
+        ::tau {= dice_result = 11 =}
+        ::tau {= dice_result = 12 =}
+    };
+    tau {= number_of_actions = number_of_actions + 1 =};
+    when( player_pos + dice_result <= 63)
+        tau {= player_pos = player_pos + dice_result =};
+    when( player_pos + dice_result > 63)
+        tau {= player_pos = (63 - (dice_result - (63 - player_pos))) =};
+
+    alt{
+        ::when( player_pos == 5)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 6)
+            tau {= player_pos = 12 =}
+        ::when( player_pos == 9)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 14)
+            tau {= player_pos = player_pos + dice_result =}
+        ::when( player_pos == 18)
+            tau {= player_pos = player_pos + dice_result =}
+            ::when( player_pos == 23)
+                tau {= number_of_actions = number_of_actions + 1 =}
+        ::when( player_pos == 19)
+            tau {= number_of_actions = number_of_actions + 2 =}
+        ::when( player_pos == 23)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 27)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 31)
+               alt{
+                   ::tau {= dice_result = 1 =}
+                   ::tau {= dice_result = 2 =}
+                   ::tau {= dice_result = 3 =}
+                   ::tau {= dice_result = 4 =}
+                   ::tau {= dice_result = 5 =}
+                   ::tau {= dice_result = 6 =}
+                   ::tau {= dice_result = 7 =}
+                   ::tau {= dice_result = 8 =}
+                   ::tau {= dice_result = 9 =}
+                   ::tau {= dice_result = 10 =}
+                   ::tau {= dice_result = 11 =}
+                   ::tau {= dice_result = 12 =}
+               };
+        ::when( player_pos == 32)
+            tau {= player_pos = player_pos + dice_result =}
+        ::when( player_pos == 36)
+            tau {= player_pos = player_pos + dice_result =}
+        ::when( player_pos == 41)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 42)
+            tau {= player_pos = 30 =}
+        ::when( player_pos == 45)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 50)
+            tau {= player_pos = player_pos + dice_result =}
+            ::when( (player_pos == 54)&(dice_result == 4))
+            tau {= number_of_actions = number_of_actions + 1 =}
+        ::when( player_pos == 52)
+            tau {= number_of_actions = number_of_actions + 2 =}
+        ::when( player_pos == 54 & dice_result != 4)
+            tau {= player_pos = player_pos - dice_result =}
+        ::when( player_pos == 58)
+            tau {= player_pos = 0 =}
+        ::when( player_pos == 59 )
+            tau {= player_pos = player_pos + dice_result =}
+
+    };
+}
