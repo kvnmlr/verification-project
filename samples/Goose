@@ -4,7 +4,7 @@ int player_pos = 0;
 int dice_result = 0;
 int number_of_actions = 0;
 
-property winning = G (player_pos != 63);
+property winning = E F((player_pos == 63) & (number_of_actions < 6));
 
 do{
     alt{

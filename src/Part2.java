@@ -76,10 +76,12 @@ public class Part2 extends AbstractChecker {
         }
 
         for (State initial : model.initialStates) {
+
             if (!witness.isEmpty()) {
                 break;
             }
             List<State> trace = new ArrayList<>();  // Trace of the current DFS run (i.e. list of explored states)
+
             DFS(initial, outerVisitingSet, innerVisitingSet, prop, trace, witness);
         }
 
@@ -113,6 +115,7 @@ public class Part2 extends AbstractChecker {
 
         if (!startState.iterator().hasNext()) {
             System.out.println(startState.hashCode());
+            System.out.println("HIER IST DER ANFANG" + ((StateEdit) startState).ltsState.toString());
             System.out.println("Terminal state has been found");
             // Found a terminal state
             return false;
@@ -254,6 +257,7 @@ public class Part2 extends AbstractChecker {
 
         ArrayList<State> initials = new ArrayList<>();
         for (State initTS : model.initialStates) {
+
             for (Integer initNBA : nba.aut.getStoredHeader().getStartStates().get(0)) {
                 for (StoredEdgeWithLabel edge : nba.aut.getEdgesWithLabel(initNBA)) {
                     if (initTS.satisfies(nba.propOfLabel(edge.getLabelExpr()))) {

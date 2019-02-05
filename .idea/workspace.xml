@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="931c4051-795f-4e2c-88a9-089cc246eecf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/samples/SimpleGoose" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samples/ifTest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MUDSest.jar" beforeDir="false" afterPath="$PROJECT_DIR$/MUDSest.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/samples/trafficGreen" beforeDir="false" afterPath="$PROJECT_DIR$/samples/trafficGreen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samples/Goose" beforeDir="false" afterPath="$PROJECT_DIR$/samples/Goose" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MudsMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MudsMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Part2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Part2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mudspg/Evaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mudspg/Evaluation.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,159 +17,80 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1642773666">
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="java" value="6" />
-          <entry key="trafficGreen" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="JAVA" value="6" />
-          <entry key="PLAIN_TEXT" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="2037" />
-          <entry key="trafficGreen" value="34" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="2037" />
-          <entry key="PLAIN_TEXT" value="34" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.open.time.13" value="1" />
-          <entry key="project.opened" value="1" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Part2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="347" column="47" lean-forward="true" selection-start-line="347" selection-start-column="47" selection-end-line="347" selection-end-column="47" />
+            <state relative-caret-position="379">
+              <caret line="117" column="101" selection-start-line="117" selection-start-column="101" selection-end-line="117" selection-end-column="101" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#588#589#0" expanded="true" />
+                <element signature="e#642#643#0" expanded="true" />
                 <element signature="e#1041#1042#0" expanded="true" />
                 <element signature="e#1096#1097#0" expanded="true" />
-                <element signature="method#nbStatesBb#0;class#Part2#0" />
-                <element signature="method#nbStatesCl#0;class#Part2#0" />
-                <element signature="e#11044#11045#0" expanded="true" />
-                <element signature="e#11087#11088#0" expanded="true" />
-                <element signature="e#11980#11981#0" expanded="true" />
-                <element signature="e#12048#12049#0" expanded="true" />
-                <element signature="e#13730#13731#0" expanded="true" />
-                <element signature="e#15858#15859#0" expanded="true" />
-                <element signature="e#15945#15946#0" expanded="true" />
-                <element signature="e#18636#18809#0" expanded="true" />
-                <element signature="e#18808#18809#0" expanded="true" />
+                <element signature="e#10990#10991#0" expanded="true" />
+                <element signature="e#11033#11034#0" expanded="true" />
+                <element signature="e#11998#11999#0" expanded="true" />
+                <element signature="e#12082#12083#0" expanded="true" />
+                <element signature="e#12552#12702#0" expanded="true" />
+                <element signature="e#12701#12702#0" expanded="true" />
+                <element signature="e#14067#14068#0" expanded="true" />
+                <element signature="e#14154#14155#0" expanded="true" />
+                <element signature="e#16845#17019#0" expanded="true" />
+                <element signature="e#17018#17019#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/helper/NotSupportedFormula.java">
+        <entry file="file://$PROJECT_DIR$/samples/ifTest">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="52" selection-start-line="7" selection-start-column="52" selection-end-line="7" selection-end-column="52" />
+            <state relative-caret-position="408">
+              <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/lang/InterruptedException.java">
+        <entry file="file://$PROJECT_DIR$/samples/Goose">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="49" column="6" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
+            <state relative-caret-position="289">
+              <caret line="29" selection-start-line="29" selection-end-line="31" selection-end-column="59" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudspg/Evaluation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="892">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
-              <folding>
-                <element signature="e#1817#1818#0" expanded="true" />
-                <element signature="e#1853#1854#0" expanded="true" />
-                <element signature="e#1941#1942#0" expanded="true" />
-                <element signature="e#1994#1995#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudschecker/ProgLTS.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="134" selection-start-line="134" selection-end-line="134" />
-              <folding>
-                <element signature="e#3062#3063#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudspg/BoolVariable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/samples/trafficGreen">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="50" lean-forward="true" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudspg/TFormula.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/samples/SimpleGoose">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="12" column="52" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="52" />
+              <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Part1.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-6480">
+              <caret line="29" column="19" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
               <folding>
-                <element signature="class#UnaryOp#0;class#TFormula#0" />
-                <element signature="e#1181#1182#0" expanded="true" />
-                <element signature="e#1205#1206#0" expanded="true" />
-                <element signature="class#BinaryOp#0;class#TFormula#0" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#4262#4455#0" expanded="true" />
+                <element signature="e#4454#4455#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudspg/Action.java">
+        <entry file="file://$PROJECT_DIR$/src/MudsMain.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/mudspg/Expression.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+              <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -188,6 +111,8 @@
       <find>system</find>
       <find>return true</find>
       <find>satisfies</find>
+      <find>checking</find>
+      <find>terminal</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -207,8 +132,12 @@
         <option value="$PROJECT_DIR$/samples/trafficlight" />
         <option value="$PROJECT_DIR$/src/mudspg/Expression.java" />
         <option value="$PROJECT_DIR$/src/mudspg/Evaluation.java" />
-        <option value="$PROJECT_DIR$/src/Part2.java" />
         <option value="$PROJECT_DIR$/samples/trafficGreen" />
+        <option value="$PROJECT_DIR$/samples/ifTest" />
+        <option value="$PROJECT_DIR$/src/Part2.java" />
+        <option value="$PROJECT_DIR$/src/MudsMain.java" />
+        <option value="$PROJECT_DIR$/samples/Goose" />
+        <option value="$PROJECT_DIR$/samples/SimpleGoose" />
       </list>
     </option>
   </component>
@@ -223,63 +152,35 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
+              <item name="verification-project" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
+              <item name="verification-project" type="462c0819:PsiDirectoryNode" />
               <item name="samples" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
+              <item name="verification-project" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="mudschecker" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="mudspg" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MUDSest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muds-project" type="462c0819:PsiDirectoryNode" />
-              <item name="submission" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547489148964" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1549394235311" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../muds-project-master" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -366,7 +267,7 @@
     <configuration name="Sample" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="MudsMain" />
       <module name="MUDSest" />
-      <option name="PROGRAM_PARAMETERS" value="trafficGreen" />
+      <option name="PROGRAM_PARAMETERS" value="SimpleGoose" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -429,7 +330,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103047000" />
+    <option name="totallyTimeSpent" value="110339000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -441,10 +342,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="32" width="1936" height="1056" extended-state="6" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.141258" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17803837" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -453,16 +354,16 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3383948" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3434453" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39934355" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.63627636" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.63596964" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.3275488" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32936078" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32719395" />
       <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Duplicate detector" order="13" weight="0.32922733" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -512,8 +413,31 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -594,28 +518,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MudsMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="21" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/util/List.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5270">
           <caret line="333" column="12" selection-start-line="333" selection-start-column="12" selection-end-line="333" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Part1.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="119" column="50" selection-start-line="119" selection-start-column="50" selection-end-line="119" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4454#4455#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -854,26 +760,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/samples/ifTest">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Part2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="347" column="47" lean-forward="true" selection-start-line="347" selection-start-column="47" selection-end-line="347" selection-end-column="47" />
+        <state relative-caret-position="379">
+          <caret line="117" column="101" selection-start-line="117" selection-start-column="101" selection-end-line="117" selection-end-column="101" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#588#589#0" expanded="true" />
+            <element signature="e#642#643#0" expanded="true" />
             <element signature="e#1041#1042#0" expanded="true" />
             <element signature="e#1096#1097#0" expanded="true" />
-            <element signature="method#nbStatesBb#0;class#Part2#0" />
-            <element signature="method#nbStatesCl#0;class#Part2#0" />
-            <element signature="e#11044#11045#0" expanded="true" />
-            <element signature="e#11087#11088#0" expanded="true" />
-            <element signature="e#11980#11981#0" expanded="true" />
-            <element signature="e#12048#12049#0" expanded="true" />
-            <element signature="e#13730#13731#0" expanded="true" />
-            <element signature="e#15858#15859#0" expanded="true" />
-            <element signature="e#15945#15946#0" expanded="true" />
-            <element signature="e#18636#18809#0" expanded="true" />
-            <element signature="e#18808#18809#0" expanded="true" />
+            <element signature="e#10990#10991#0" expanded="true" />
+            <element signature="e#11033#11034#0" expanded="true" />
+            <element signature="e#11998#11999#0" expanded="true" />
+            <element signature="e#12082#12083#0" expanded="true" />
+            <element signature="e#12552#12702#0" expanded="true" />
+            <element signature="e#12701#12702#0" expanded="true" />
+            <element signature="e#14067#14068#0" expanded="true" />
+            <element signature="e#14154#14155#0" expanded="true" />
+            <element signature="e#16845#17019#0" expanded="true" />
+            <element signature="e#17018#17019#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MudsMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Part1.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6480">
+          <caret line="29" column="19" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4262#4455#0" expanded="true" />
+            <element signature="e#4454#4455#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/Goose">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="29" selection-start-line="29" selection-end-line="31" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/SimpleGoose">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
         </state>
       </provider>
     </entry>

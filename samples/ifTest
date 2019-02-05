@@ -1,0 +1,25 @@
+int dice_result = 0;
+int poi = 0;
+
+property winning = G (poi != 2);
+
+do{
+   tau{= poi = 1 =};
+
+   alt{
+      ::tau {= dice_result = 1 =}
+      ::tau {= dice_result = 2 =}
+      ::tau {= dice_result = 3 =}
+      ::tau {= dice_result = 4 =}
+      ::tau {= dice_result = 5 =}
+      ::tau {= dice_result = 6 =}
+   };
+
+   if( dice_result == 6) {
+      tau {= poi = 2 =}
+   } else {
+      tau {= poi = 3 =}
+   };
+
+   tau{= poi = 4 =};
+}

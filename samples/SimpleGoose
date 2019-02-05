@@ -1,0 +1,23 @@
+
+
+int player_pos = 0;
+int dice_result = 0;
+int number_of_actions = 0;
+
+property winning = E F((player_pos == 4) & (number_of_actions < 5));
+
+do{
+    alt{
+        ::tau {= dice_result = 1 =}
+        ::tau {= dice_result = 2 =}
+        ::tau {= dice_result = 3 =}
+    };
+    tau {= number_of_actions = number_of_actions + 1 =};
+    when( player_pos + dice_result <= 4)
+        tau {= player_pos = player_pos + dice_result =};
+
+    alt{
+        ::when( player_pos == 3)
+            tau {= player_pos = player_pos - dice_result =}
+    };
+}
