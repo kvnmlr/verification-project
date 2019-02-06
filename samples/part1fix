@@ -1,0 +1,6 @@
+bool x = true;
+bool y = true;
+
+property prop = A G (A (x U y));
+
+tau{};0

@@ -1,9 +1,8 @@
 import java.util.*;
 
 import mudschecker.*;
-import mudspg.Evaluation;
-import mudspg.Expression;
-import mudspg.TFormula;
+import mudschecker.Transition;
+import mudspg.*;
 
 public class Part1 extends AbstractChecker {
 
@@ -77,8 +76,7 @@ public class Part1 extends AbstractChecker {
      * Exercise: given a temporal formula, construct its ENF, or raise an Exception
      */
     public TFormula toENF(TFormula phi) {
-        // System.out.println(phi);
-        phi = removePathFormulas(phi, true);
+        System.out.println(phi);
 
         phi = removeForAll(phi, true);
 
@@ -97,70 +95,32 @@ public class Part1 extends AbstractChecker {
      * @param exists only for internal recursion
      * @return the transformed formula
      */
-    private TFormula removePathFormulas(TFormula phi, boolean exists) {
-        String s = phi.getClass().getSimpleName();
+    private TFormula removeWeakUntil(TFormula phi, boolean exists) {
+        /*String s = phi.getClass().getSimpleName();
         switch (s) {
             case "Exist": {
                 // When the parent of a W is an E, we have to transform it into an A
-                ((TFormula.Exist) phi).sub = removePathFormulas(((TFormula.Exist) phi).sub, true);
+                ((TFormula.Exist) phi).sub = removeWeakUntil(((TFormula.Exist) phi).sub, true);
                 break;
             }
             case "All": {
                 // When the parent of a W is an A, we have to transform it into an E
-                ((TFormula.All) phi).sub = removePathFormulas(((TFormula.All) phi).sub, false);
+                ((TFormula.All) phi).sub = removeWeakUntil(((TFormula.All) phi).sub, false);
                 break;
             }
-            case "Eventually": {
-                // We can transform an F x in to true U x
-                TFormula sub = ((TFormula.Eventually) phi).sub;
 
-                // Build the true proposition
-                TFormula propTrue = new TFormula.Proposition(new Expression<Boolean>() {
-                    @Override
-                    public Boolean compute(Evaluation e) {
-                        return true;
-                    }
-                });
-                phi = new TFormula.Until(propTrue, sub);
-                break;
-            }
-            case "WeakUntil": {
-                TFormula suba = ((TFormula.WeakUntil) phi).suba;
-                TFormula subb = ((TFormula.WeakUntil) phi).subb;
-
-                // Create the two negated sub formulas
-                TFormula.Not subaNeg = new TFormula.Not(suba);
-                TFormula.Not subbNeg = new TFormula.Not(subb);
-
-                // Create the &&
-                TFormula.And and = new TFormula.And(subaNeg, subbNeg);
-
-                // Create the U
-                TFormula.Until until = new TFormula.Until(subbNeg, and);
-
-                TFormula.UnaryOp pathQuantifier;
-                if (exists) {
-                    pathQuantifier = new TFormula.All(until);
-                } else {
-                    pathQuantifier = new TFormula.Exist(until);
-                }
-
-                // Since we maybe introduced an A in the subformula, we have to make a recursive call
-                phi = removePathFormulas(new TFormula.Not(pathQuantifier), exists);
-                break;
-            }
             default: {
                 // This subformula is not relevant for the transformation, just descent into the sub formulas
                 if (phi instanceof TFormula.UnaryOp) {
-                    ((TFormula.UnaryOp) phi).sub = removePathFormulas(((TFormula.UnaryOp) phi).sub, exists);
+                    ((TFormula.UnaryOp) phi).sub = removeWeakUntil(((TFormula.UnaryOp) phi).sub, exists);
                 }
                 if (phi instanceof TFormula.BinaryOp) {
-                    ((TFormula.BinaryOp) phi).suba = removePathFormulas(((TFormula.BinaryOp) phi).suba, exists);
-                    ((TFormula.BinaryOp) phi).subb = removePathFormulas(((TFormula.BinaryOp) phi).subb, exists);
+                    ((TFormula.BinaryOp) phi).suba = removeWeakUntil(((TFormula.BinaryOp) phi).suba, exists);
+                    ((TFormula.BinaryOp) phi).subb = removeWeakUntil(((TFormula.BinaryOp) phi).subb, exists);
                 }
                 break;
             }
-        }
+        }*/
         return phi;
     }
 
@@ -181,28 +141,65 @@ public class Part1 extends AbstractChecker {
             case "Next": {
                 // Only transform Xs that are part of an A
                 if (!exists) {
-                    TFormula.Not subNeg = new TFormula.Not(((TFormula.Next) phi).sub);
+                    TFormula.Not subNeg = new TFormula.Not(removeForAll(((TFormula.Next) phi).sub, false));
                     TFormula.Next next = new TFormula.Next(subNeg);
                     TFormula.Exist exist = new TFormula.Exist(next);
                     return new TFormula.Not(exist);
                 }
                 break;
             }
+            case "WeakUntil": {
+                TFormula suba = removeForAll(((TFormula.WeakUntil) phi).suba, false);
+                TFormula subb = removeForAll(((TFormula.WeakUntil) phi).subb, false);
+
+                // Create the two negated sub formulas
+                TFormula.Not subaNeg = new TFormula.Not(suba);
+                TFormula.Not subbNeg = new TFormula.Not(subb);
+
+                // Create the &&
+                TFormula.And and = new TFormula.And(subaNeg, subbNeg);
+
+                // Create the U
+                TFormula.Until until = new TFormula.Until(subbNeg, and);
+
+                TFormula.UnaryOp pathQuantifier;
+                if (exists) {
+                    pathQuantifier = new TFormula.All(until);
+                } else {
+                    pathQuantifier = new TFormula.Exist(until);
+                }
+
+                // Since we maybe introduced an A in the subformula, we have to make a recursive call
+                return removeWeakUntil(new TFormula.Not(pathQuantifier), exists);
+            }
             case "Globally": {
                 // Only transform Xs that are part of an A
                 if (!exists) {
-                    TFormula.Not subNeg = new TFormula.Not(((TFormula.Globally) phi).sub);
-                    TFormula propTrue = new TFormula.Proposition(new Expression<Boolean>() {
-                        @Override
-                        public Boolean compute(Evaluation e) {
-                            return true;
-                        }
-                    });
+                    TFormula.Not subNeg = new TFormula.Not(removeForAll(((TFormula.Globally) phi).sub, false));
+                    TFormula propTrue = new TFormula.Proposition(Constant.true_value);
                     TFormula.Until until = new TFormula.Until(propTrue, subNeg);
                     TFormula.Exist exist = new TFormula.Exist(until);
                     return new TFormula.Not(exist);
                 }
                 break;
+            }
+            case "Eventually": {
+                if (!exists) {
+                    // We can transform an F x in to true U x
+                    TFormula sub = removeForAll(((TFormula.Eventually) phi).sub, false);
+
+                    // Build the true proposition
+                    TFormula not = new TFormula.Not(sub);
+                    TFormula globally = new TFormula.Globally(not);
+                    TFormula existsSub = new TFormula.Exist(globally);
+                    return new TFormula.Not(existsSub);
+                } else {
+                    TFormula sub = removeForAll(((TFormula.Eventually) phi).sub, false);
+
+                    // Build the true proposition
+                    TFormula propTrue = new TFormula.Proposition(Constant.true_value);
+                    return new TFormula.Until(propTrue, sub);
+                }
             }
             case "Until": {
                 if (!exists) {
@@ -222,8 +219,12 @@ public class Part1 extends AbstractChecker {
 
                     // Conjunction
                     return new TFormula.And(existLeftNot, existRightNot);
+                } else {
+                    TFormula left = removeForAll(((TFormula.Until) phi).suba, true);
+                    TFormula right = removeForAll(((TFormula.Until) phi).subb, true);
+
+                    return new TFormula.Until(left, right);
                 }
-                break;
             }
             default: {
                 // This subformula is not relevant for the transformation, just descent into the sub formulas
@@ -269,10 +270,8 @@ public class Part1 extends AbstractChecker {
                 Set<State> globallySat = new HashSet<>();
 
                 // Find all states that have an outgoing path that contains only states from subSatSet forever
-                for (State s : model) {
-                    if (subSatSet.contains(s)) {
-                        globallySat.addAll(DFS(s, subSatSet, new HashSet<>()));
-                    }
+                for (State s : subSatSet) {
+                    globallySat.addAll(DFS(s, subSatSet, new HashSet<>()));
                 }
                 return globallySat;
             }
@@ -355,9 +354,10 @@ public class Part1 extends AbstractChecker {
             visited.add(state);
             for (Transition t : state) {
                 State target = t.target;
-                stack.push(target);
                 if (state.equals(target)) {
                     path.put(target, state);
+                } else {
+                    stack.push(target);
                 }
             }
         }
@@ -411,6 +411,15 @@ public class Part1 extends AbstractChecker {
     @Override
     public boolean solve(LTS model, TFormula tform, int bound) {
         // Check bounds
+
+        int n = 0;
+        for (State s : model) {
+            System.out.println("State " + n + ": " + s.toString());
+            n++;
+        }
+
+        System.out.println("Model has " + n + " states");
+
         if (!checkBounded(model, bound)) {
             System.out.println("Model is not bounded\n");
             return false;

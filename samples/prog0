@@ -1,8 +1,10 @@
 //Simple program to demonstrate usage of assignement
 
-property t = true;
 
 int x;
+property t = E F (x==1);
+
+
 tau{= x=3 =};
 tau{= x=2 =};
 tau{= x=1 =}

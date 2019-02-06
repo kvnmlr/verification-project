@@ -1,23 +1,23 @@
-
-
 int player_pos = 0;
 int dice_result = 0;
 int number_of_actions = 0;
+int goal = 4;
 
-property winning = E F((player_pos == 4) & (number_of_actions < 5));
+property winning = E F player_pos == goal;
 
 do{
-    alt{
-        ::tau {= dice_result = 1 =}
-        ::tau {= dice_result = 2 =}
-        ::tau {= dice_result = 3 =}
-    };
-    tau {= number_of_actions = number_of_actions + 1 =};
-    when( player_pos + dice_result <= 4)
-        tau {= player_pos = player_pos + dice_result =};
+    //when(player_pos == goal) {break;};
 
+    // Roll Dice
     alt{
-        ::when( player_pos == 3)
-            tau {= player_pos = player_pos - dice_result =}
+        //::tau {= dice_result = 1 =}
+        ::tau {= dice_result = 2 =}
+        //::tau {= dice_result = 3 =}
     };
+
+    // Increment number of actions and player position
+    tau{= number_of_actions = (number_of_actions + 1), player_pos = (player_pos + dice_result) =};
+
+    // Bounce back when goal is overshot
+    when(player_pos > goal) {tau{= player_pos = (goal - (player_pos - goal)) =}};
 }
