@@ -34,6 +34,7 @@ public class Part1 extends AbstractChecker {
     /**
      * Checks whether the given formula is either a valid state or path formula, depending on the flag
      * and goes on recursively for sub formulas
+     *
      * @param phi                 the formula
      * @param requireStateFormula whether phi should be a state formula
      * @return true iff the given phi is a valid CTL formula
@@ -321,7 +322,7 @@ public class Part1 extends AbstractChecker {
      * @return set of satisfying states
      */
     private Set<State> DFS(State start, Set<State> satSet, Set<State> satSetUntil) {
-        Map<State, State> path = new HashMap<>();
+        Map<State, HashSet<State>> path = new HashMap<>();
         Stack<State> stack = new Stack<>();
         stack.push(start);
         Set<State> visited = new HashSet<>();
@@ -342,8 +343,8 @@ public class Part1 extends AbstractChecker {
 
             if (visited.contains(state)) {
                 if (!satSetUntil.isEmpty()) {
-                    // We ran into a loop without seeing the U condition, break
-                    break;
+                    // We ran into a loop without seeing the U condition, continue with next stack elements
+                    continue;
                 } else {
                     // we discovered a loop or dead-end on a path where all states so far are form the satSet
                     goal = state;
@@ -354,20 +355,38 @@ public class Part1 extends AbstractChecker {
             visited.add(state);
             for (Transition t : state) {
                 State target = t.target;
-                if (state.equals(target)) {
-                    path.put(target, state);
-                } else {
-                    stack.push(target);
+                if (!state.equals(target)) {
+                    if (path.containsKey(target)) {
+                        HashSet<State> set;
+                        set = path.get(target);
+                        set.add(state);
+                        path.put(target, set);
+                    } else {
+                        HashSet<State> set = new HashSet<State>();
+                        set.add(state);
+                        path.put(target, set);
+                    }
                 }
+                stack.push(target);
             }
         }
 
         Set<State> globallySatSet = new HashSet<>();
         if (goal != null) {
-            State s = goal;
-            while (path.containsKey(s)) {
-                globallySatSet.add(s);
-                s = path.get(s);
+            ArrayList<State> stateList = new ArrayList<>();
+            stateList.add(goal);
+            while (!stateList.isEmpty()) {
+                ArrayList<State> predStates = new ArrayList<State>();
+                for (State s : stateList) {
+                    predStates = new ArrayList<State>();
+                    if (!globallySatSet.contains(s)) {
+                        globallySatSet.add(s);
+                        if (path.containsKey(s)) {
+                            predStates.addAll(path.get(s));
+                        }
+                    }
+                }
+                stateList = predStates;
             }
             globallySatSet.add(start);
         }
@@ -439,6 +458,7 @@ public class Part1 extends AbstractChecker {
         // Compute satisfaction set
         Set<State> satSet = satSet(model, tform);
         System.out.println("Found " + satSet.size() + " satisfying states");
+
 
         // Check if model satisfies property
         boolean satisfies = true;

@@ -1,23 +1,37 @@
+// Variables
 int player_pos = 0;
-int dice_result = 0;
 int number_of_actions = 0;
-int goal = 4;
+bool round_complete = false;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
-property winning = E F player_pos == goal;
+// Constants
+int goal = 7;       // the goal field
+int bound = 4;      // to make the model finite
 
-do{
-    //when(player_pos == goal) {break;};
+// Has to roll 1, 2, 2, 2
+property winning = E F player_pos == goal && number_of_actions <= bound &  round_complete;
 
-    // Roll Dice
+while( player_pos != goal & number_of_actions <= bound){
+    // Roll the die
     alt{
-        //::tau {= dice_result = 1 =}
-        ::tau {= dice_result = 2 =}
-        //::tau {= dice_result = 3 =}
+      ::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 1) =}
+      ::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 2) =}
+      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 3) =}
+      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 4) =}
+      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 5) =}
+      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 6) =}
     };
 
-    // Increment number of actions and player position
-    tau{= number_of_actions = (number_of_actions + 1), player_pos = (player_pos + dice_result) =};
+    // Bounce back from goal
+    if(player_pos > goal)
+      { tau{= player_pos = (goal - (player_pos - goal)) =} }
+    else
+      { tau };
 
-    // Bounce back when goal is overshot
-    when(player_pos > goal) {tau{= player_pos = (goal - (player_pos - goal)) =}};
+    // Implement special rules (hier: Felder 2 und 4 muessen übersprungen werden)
+    alt{
+        ::when( player_pos == 2 ) { tau {= player_pos = 0 =} }
+        ::when( player_pos == 4 ) { tau {= player_pos = 0 =} }
+        ::when( player_pos != 2 & player_pos != 4) { tau };
+    };
+    tau {= round_complete = true =};
 }

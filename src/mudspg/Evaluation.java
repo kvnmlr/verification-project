@@ -55,13 +55,6 @@ public class Evaluation {
 	}
 	
 	public boolean get_bool(Variable<Boolean> v) {
-		if (v == null) {
-			System.out.println("v is null");
-		}
-		if (bool_values == null) {
-			System.out.println("b is null");
-		}
-		System.out.println("asd");
 		return bool_values.get(v);
 	}
 	
