@@ -1,6 +1,7 @@
 // Variables
 int player_pos = 0;
 int number_of_actions = 0;
+int dice_outcome;
 bool round_complete = false;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
@@ -13,13 +14,14 @@ property winning = E F player_pos == goal && number_of_actions <= bound &  round
 while( player_pos != goal & number_of_actions <= bound){
     // Roll the die
     alt{
-      ::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 1) =}
-      ::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 2) =}
-      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 3) =}
-      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 4) =}
-      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 5) =}
-      //::tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 6) =}
+      ::tau {= round_complete = false, dice_outcome = 1 =}
+      ::tau {= round_complete = false, dice_outcome = 2 =}
+      //::tau {= round_complete = false, dice_outcome = 3 =}
+      //::tau {= round_complete = false, dice_outcome = 4 =}
+      //::tau {= round_complete = false, dice_outcome = 5 =}
+      //::tau {= round_complete = false, dice_outcome = 6 =}
     };
+    tau {= number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =};
 
     // Bounce back from goal
     if(player_pos > goal)
