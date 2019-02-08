@@ -9,7 +9,7 @@ int goal = 7;       // the goal field
 int bound = 4;      // to make the model finite
 
 // Has to roll 1, 2, 2, 2
-property winning = E F player_pos == goal && number_of_actions <= bound &  round_complete;
+property winning = E F player_pos == goal && number_of_actions <= bound &  round_complete && ;
 
 while( player_pos != goal & number_of_actions <= bound){
     // Roll the die

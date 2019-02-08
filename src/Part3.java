@@ -78,6 +78,11 @@ public class Part3 extends AbstractChecker {
      */
     private boolean buggyGame(LTS mode, int modelBound) {
         // TODO implement
+        /**
+        First Bug: Standing on the fountain on #31 then throwing a five --> engage to loop #31 --> #36 --> #41 --> #36 --> #41 ....
+
+        Second Bug: Standing on #51 throwing an 8 --> engage to loop #51 --> #59 --> (#63 - 4) --> #59 --> (#63 - 4) ....
+         */
         return true;
     }
 
