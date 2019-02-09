@@ -146,8 +146,9 @@ public class Part1 extends AbstractChecker {
                     TFormula.Next next = new TFormula.Next(subNeg);
                     TFormula.Exist exist = new TFormula.Exist(next);
                     return new TFormula.Not(exist);
+                } else {
+                    return new TFormula.Next(removeForAll(((TFormula.Next) phi).sub, false));
                 }
-                break;
             }
             case "WeakUntil": {
                 TFormula suba = removeForAll(((TFormula.WeakUntil) phi).suba, false);
@@ -181,8 +182,9 @@ public class Part1 extends AbstractChecker {
                     TFormula.Until until = new TFormula.Until(propTrue, subNeg);
                     TFormula.Exist exist = new TFormula.Exist(until);
                     return new TFormula.Not(exist);
+                } else {
+                    return new TFormula.Globally(removeForAll(((TFormula.Globally) phi).sub, false));
                 }
-                break;
             }
             case "Eventually": {
                 if (!exists) {
@@ -255,11 +257,14 @@ public class Part1 extends AbstractChecker {
             }
             case "And": {
                 Set<State> subASatSet = satSet(model, ((TFormula.And) phi).suba);
-                for(State s : subASatSet) {
-                    System.out.println(s);
-                }
                 Set<State> subBSatSet = satSet(model, ((TFormula.And) phi).subb);
                 subASatSet.retainAll(subBSatSet);
+                return subASatSet;
+            }
+            case "Or": {
+                Set<State> subASatSet = satSet(model, ((TFormula.Or) phi).suba);
+                Set<State> subBSatSet = satSet(model, ((TFormula.Or) phi).subb);
+                subASatSet.addAll(subBSatSet);
                 return subASatSet;
             }
             case "Not": {

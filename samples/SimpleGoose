@@ -1,39 +1,66 @@
 // Variables
 int player_pos = 0;
 int number_of_actions = 0;
+int number_of_internal_steps = 0;
+bool special_field_1 = false;
+bool special_field_2 = false;
+
 int dice_outcome;
-bool round_complete = false;    // lock, only true in states with final player position (i.e. after bounce and special fields)
+bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
 int goal = 3;       // the goal field
 int bound = 2;      // to make the model finite
 
-// Has to roll 1, 2, 2, 2
-property winning = E F player_pos == goal && number_of_actions <= bound;
+// Exercise 2
+//property exercise2 = E F player_pos == goal && round_complete;
 
-while( player_pos != goal & number_of_actions <= bound){
-    // Roll the die
+// Exercise 3
+//property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+
+// Exercise 4
+property exercise4 = (E F((special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||(special_field_2 && (E X(!E ((!special_field_2) U round_complete)))) &&number_of_internal_steps > 1));
+
+while( player_pos != goal & number_of_actions <= bound & number_of_internal_steps < 5){
+    tau {= special_field_1 = false, special_field_2 = false, number_of_internal_steps = number_of_internal_steps + 1 =};
+
+    // Roll the die when the current round is completed, otherwise keep dice outcome from previous cycle and
+    // do bounce back and special field movements again without throwing new die
     alt{
-      ::tau {= round_complete = false, dice_outcome = 1 =};
-      ::tau {= round_complete = false, dice_outcome = 2 =};
-      ::tau {= round_complete = false, dice_outcome = 3 =}
-      //::tau {= round_complete = false, dice_outcome = 4 =}
-      //::tau {= round_complete = false, dice_outcome = 5 =}
-      //::tau {= round_complete = false, dice_outcome = 6 =}
+        ::when( !round_complete) { tau };
+        // when we force a 1 as first dice result, the game cannot be won because of the buggy game logic (see below)
+        //::when( round_complete & number_of_actions == 0 ) { tau {= dice_outcome = 2 =}; };
+
+        // normal dice roll
+        ::when( round_complete & number_of_actions >= 0 ) {
+             alt{
+                   ::tau {= dice_outcome = 1 =};
+                   ::tau {= dice_outcome = 2 =};
+                   ::tau {= dice_outcome = 3 =};
+                   //::tau {= dice_outcome = 4 =};
+                   //::tau {= dice_outcome = 5 =};
+                   //::tau {= dice_outcome = 6 =};
+             };
+         };
     };
-    tau {= number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =};
+
+    alt{
+        // the previous round was finished and a new dice has been thrown
+        ::when( round_complete ) { tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =}; };
+        ::when( !round_complete ) { tau };
+    };
+
 
     // Bounce back from goal
     if(player_pos > goal)
-      { tau{= player_pos = (goal - (player_pos - goal)) =} }
+      { tau{= player_pos = (goal - (player_pos - goal)) =}; }
     else
       { tau };
 
-    // Implement special rules (hier: Felder 2 und 4 muessen übersprungen werden)
     alt{
-        ::when( player_pos == 6 ) { tau {= player_pos = 0 =} }
-        ::when( player_pos == 7 ) { tau {= player_pos = 0 =} }
-        ::when( player_pos != 6 & player_pos != 7) { tau };
+        // Buggy game logic example, in order to win, player must not throw 1 or 2 but immediately a 3
+        ::when( player_pos == 1 ) { tau {= player_pos = 2, special_field_1 = true =}; };
+        ::when( player_pos == 2 ) { tau {= player_pos = 1, special_field_2 = true =}; };
+        ::when( player_pos != 1 & player_pos != 2) { tau {= round_complete = true =}; };     // if we are not on a special field, the current action is completed
     };
-    tau {= round_complete = true =};
 }
