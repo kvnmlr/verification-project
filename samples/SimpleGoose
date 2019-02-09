@@ -5,18 +5,18 @@ int dice_outcome;
 bool round_complete = false;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
-int goal = 7;       // the goal field
-int bound = 4;      // to make the model finite
+int goal = 3;       // the goal field
+int bound = 2;      // to make the model finite
 
 // Has to roll 1, 2, 2, 2
-property winning = E F player_pos == goal && number_of_actions <= bound &  round_complete && ;
+property winning = E F player_pos == goal && number_of_actions <= bound;
 
 while( player_pos != goal & number_of_actions <= bound){
     // Roll the die
     alt{
-      ::tau {= round_complete = false, dice_outcome = 1 =}
-      ::tau {= round_complete = false, dice_outcome = 2 =}
-      //::tau {= round_complete = false, dice_outcome = 3 =}
+      ::tau {= round_complete = false, dice_outcome = 1 =};
+      ::tau {= round_complete = false, dice_outcome = 2 =};
+      ::tau {= round_complete = false, dice_outcome = 3 =}
       //::tau {= round_complete = false, dice_outcome = 4 =}
       //::tau {= round_complete = false, dice_outcome = 5 =}
       //::tau {= round_complete = false, dice_outcome = 6 =}
@@ -31,9 +31,9 @@ while( player_pos != goal & number_of_actions <= bound){
 
     // Implement special rules (hier: Felder 2 und 4 muessen übersprungen werden)
     alt{
-        ::when( player_pos == 2 ) { tau {= player_pos = 0 =} }
-        ::when( player_pos == 4 ) { tau {= player_pos = 0 =} }
-        ::when( player_pos != 2 & player_pos != 4) { tau };
+        ::when( player_pos == 6 ) { tau {= player_pos = 0 =} }
+        ::when( player_pos == 7 ) { tau {= player_pos = 0 =} }
+        ::when( player_pos != 6 & player_pos != 7) { tau };
     };
     tau {= round_complete = true =};
 }

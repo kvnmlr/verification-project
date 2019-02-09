@@ -9,6 +9,7 @@ import mudspg.TFormula;
 public class Part3 extends AbstractChecker {
     private Part1 part1Checker;
     private Part2 part2Checker;
+    List<State> paths = new ArrayList<>();
 
     Set<State> computeSatSet(LTS model, TFormula tform) {
         // Check for valid CTL
@@ -30,6 +31,10 @@ public class Part3 extends AbstractChecker {
 
         Set<State> satSet = computeSatSet(model, tform);
         System.out.println("Found " + satSet.size() + " satisfying states");
+        for (State s : satSet) {
+            System.out.println(s);
+        }
+
 
         // Check if model satisfies property
         boolean satisfies = true;
@@ -65,9 +70,48 @@ public class Part3 extends AbstractChecker {
             }
         }
 
-        // TODO reconstruct all paths from initial state to goal state from satSet using DSF
+        for (State s : model.initialStates) {
+            System.out.println("Paths:");
+            PrintAllPath(s, satSet);
+        }
         int paths = 0;
         System.out.println("RESULT: " + paths);
+    }
+
+    private void PrintAllPath(State start, Set<State> satSet) {
+        boolean hasStatisfyingSuccessor = false;
+        for (Transition succ : start) {
+            if (satSet.contains(succ.target)) {
+                hasStatisfyingSuccessor = true;
+                break;
+            }
+        }
+
+        if (!hasStatisfyingSuccessor) {
+            // leaf node
+            paths.add(start);
+            System.out.println("Path:");
+            PrintPath();
+            paths.remove(start);
+            return;
+        }
+        paths.add(start);
+
+        for (Transition succ : start) {
+            State target = succ.target;
+            if (satSet.contains(target)) {
+                PrintAllPath(target, satSet);
+            }
+
+        }
+        paths.remove(start);
+    }
+
+    private void PrintPath() {
+        for (State s : paths) {
+            System.out.println(s.toString());
+        }
+        System.out.println();
     }
 
     /**

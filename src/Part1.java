@@ -255,7 +255,11 @@ public class Part1 extends AbstractChecker {
             }
             case "And": {
                 Set<State> subASatSet = satSet(model, ((TFormula.And) phi).suba);
-                subASatSet.retainAll(satSet(model, ((TFormula.And) phi).subb));
+                for(State s : subASatSet) {
+                    System.out.println(s);
+                }
+                Set<State> subBSatSet = satSet(model, ((TFormula.And) phi).subb);
+                subASatSet.retainAll(subBSatSet);
                 return subASatSet;
             }
             case "Not": {
@@ -301,7 +305,7 @@ public class Part1 extends AbstractChecker {
                 if (!subUntilSet.isEmpty()) {
                     // Find all states that have an outgoing path that contains only states from subSatSet forever
                     for (State s : model) {
-                        if (subSatSet.contains(s) || subUntilSet.contains(s)) {
+                        if ((subSatSet.contains(s) || subUntilSet.contains(s)) && !untilSat.contains(s)) {
                             untilSat.addAll(DFS(s, subSatSet, subUntilSet));
                         }
                     }
@@ -373,20 +377,17 @@ public class Part1 extends AbstractChecker {
 
         Set<State> globallySatSet = new HashSet<>();
         if (goal != null) {
-            ArrayList<State> stateList = new ArrayList<>();
+            Set<State> stateList = new HashSet<>();
             stateList.add(goal);
             while (!stateList.isEmpty()) {
-                ArrayList<State> predStates = new ArrayList<State>();
+                Set<State> predStates = new HashSet<>();
                 for (State s : stateList) {
-                    predStates = new ArrayList<State>();
-                    if (!globallySatSet.contains(s)) {
-                        globallySatSet.add(s);
-                        if (path.containsKey(s)) {
-                            predStates.addAll(path.get(s));
-                        }
+                    globallySatSet.add(s);
+                    if (path.containsKey(s)) {
+                        predStates.addAll(path.get(s));
                     }
                 }
-                stateList = predStates;
+                stateList = new HashSet<>(predStates);
             }
             globallySatSet.add(start);
         }
