@@ -23,6 +23,7 @@ bool special_field_16 = false;
 bool special_field_17 = false;
 bool special_field_18 = false;
 bool special_field_19 = false;
+bool special_at_a_point = false;
 
 
 int dice_outcome;
@@ -95,16 +96,16 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
              alt{
                    //::tau {= dice_outcome = 1 =};
                    //::tau {= dice_outcome = 2 =};
-                   //::tau {= dice_outcome = 3 =};
+                   ::tau {= dice_outcome = 3 =};
                    //::tau {= dice_outcome = 4 =};
-                   //::tau {= dice_outcome = 5 =};
+                   ::tau {= dice_outcome = 5 =};
                    //::tau {= dice_outcome = 6 =};
                    //::tau {= dice_outcome = 7 =};
                    //::tau {= dice_outcome = 8 =};
                    ::tau {= dice_outcome = 9 =};
-                   ::tau {= dice_outcome = 10 =};
+                   //::tau {= dice_outcome = 10 =};
                    ::tau {= dice_outcome = 11 =};
-                   ::tau {= dice_outcome = 12 =};
+                   //::tau {= dice_outcome = 12 =};
              };
          };
     };
@@ -131,18 +132,18 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
         ::when( player_pos == 18 ) { tau {= player_pos = 23, round_complete = true, number_of_internal_steps = 0, special_field_5 = true =}; };
         ::when( player_pos == 19 ) { tau {= round_complete = true, number_of_internal_steps = 0, special_field_6 = true =}; };
         ::when( player_pos == 23 ) { tau {= player_pos = player_pos - dice_outcome, special_field_7 = true =}; };
-        ::when( player_pos == 27 ) { tau {= special_field_8 = true =}; };
+        ::when( player_pos == 27 ) { tau {= player_pos = player_pos - dice_outcome, special_field_8 = true =}; };
         ::when( player_pos == 31 ) { tau {= special_field_9 = true =}; };
-        ::when( player_pos == 32 ) { tau {= special_field_10 = true =}; };
-        ::when( player_pos == 36 ) { tau {= special_field_11 = true =}; };
-        ::when( player_pos == 41 ) { tau {= special_field_12 = true =}; };
-        ::when( player_pos == 42 ) { tau {= special_field_13 = true =}; };
-        ::when( player_pos == 45 ) { tau {= special_field_14 = true =}; };
+        ::when( player_pos == 32 ) { tau {= player_pos = player_pos + dice_outcome, special_field_10 = true =}; };
+        ::when( player_pos == 36 ) { tau {= player_pos = player_pos + dice_outcome, special_field_11 = true =}; };
+        ::when( player_pos == 41 ) { tau {= player_pos = player_pos - dice_outcome, special_field_12 = true =}; };
+        ::when( player_pos == 42 ) { tau {= player_pos = 30, special_field_13 = true =}; };
+        ::when( player_pos == 45 ) { tau {= player_pos = player_pos - dice_outcome, special_field_14 = true =}; };
         ::when( player_pos == 50 ) { tau {= special_field_15 = true =}; };
         ::when( player_pos == 52 ) { tau {= special_field_16 = true =}; };
-        ::when( player_pos == 54 ) { tau {= special_field_17 = true =}; };
-        ::when( player_pos == 58 ) { tau {= special_field_18 = true =}; };
-        ::when( player_pos == 59 ) { tau {= special_field_19 = true =}; };
+        ::when( player_pos == 54 ) { tau {= player_pos = player_pos - dice_outcome, special_field_17 = true =}; };
+        ::when( player_pos == 58 ) { tau {= player_pos = 0, special_field_18 = true =}; };
+        ::when( player_pos == 59 ) { tau {= player_pos = player_pos + dice_outcome, special_field_19 = true =}; };
 
         ::when(
             player_pos != 5 &
