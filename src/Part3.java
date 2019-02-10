@@ -36,7 +36,12 @@ public class Part3 extends AbstractChecker {
         if (!hasStatisfyingSuccessor) {
             currentPath.add(start);
             paths.add(new ArrayList<>(currentPath));
+            System.out.println("Found a path");
             currentPath.remove(start);
+            return;
+        }
+
+        if (paths.size() >= 20) {
             return;
         }
 
@@ -145,7 +150,7 @@ public class Part3 extends AbstractChecker {
             return false;
         }
 
-        short runExercise = 4;
+        short runExercise = 3;
         switch (runExercise) {
             case 2:
                 // Exercise 2

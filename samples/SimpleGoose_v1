@@ -1,28 +1,42 @@
+// Simple Goose v1: Simplified game rules with simple dice, works with Exercise 2, 3 and 4
+
 // Variables
 int player_pos = 0;
 int number_of_actions = 0;
 int number_of_internal_steps = 0;
 bool special_field_1 = false;
 bool special_field_2 = false;
+bool special_field_3 = false;
+bool special_field_4 = false;
 
 int dice_outcome;
 bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
-int goal = 3;       // the goal field
+int goal = 6;       // the goal field
 int bound = 2;      // to make the model finite
 
 // Exercise 2
 //property exercise2 = E F player_pos == goal && round_complete;
 
 // Exercise 3
-//property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
 
 // Exercise 4
-property exercise4 = (E F((special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||(special_field_2 && (E X(!E ((!special_field_2) U round_complete)))) &&number_of_internal_steps > 1));
+//property exercise4 = (E F(
+//(special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||
+//(special_field_2 && (E X(!E ((!special_field_2) U round_complete)))) ||
+//(special_field_3 && (E X(!E ((!special_field_3) U round_complete)))) ||
+//(special_field_4 && (E X(!E ((!special_field_4) U round_complete)))) &&
+//number_of_internal_steps > 1));
 
-while( player_pos != goal & number_of_actions <= bound & number_of_internal_steps < 5){
-    tau {= special_field_1 = false, special_field_2 = false, number_of_internal_steps = number_of_internal_steps + 1 =};
+while( player_pos != goal & number_of_actions <= bound & number_of_internal_steps < 2){
+    tau {=
+        special_field_1 = false,
+        special_field_2 = false,
+        special_field_3 = false,
+        special_field_4 = false,
+        number_of_internal_steps = number_of_internal_steps + 1 =};
 
     // Roll the die when the current round is completed, otherwise keep dice outcome from previous cycle and
     // do bounce back and special field movements again without throwing new die
@@ -58,9 +72,15 @@ while( player_pos != goal & number_of_actions <= bound & number_of_internal_step
       { tau };
 
     alt{
-        // Buggy game logic example, in order to win, player must not throw 1 or 2 but immediately a 3
+        // Buggy game logic example, in order to win, player must not go to field 1, 2, 4 or 5
         ::when( player_pos == 1 ) { tau {= player_pos = 2, special_field_1 = true =}; };
         ::when( player_pos == 2 ) { tau {= player_pos = 1, special_field_2 = true =}; };
-        ::when( player_pos != 1 & player_pos != 2) { tau {= round_complete = true =}; };     // if we are not on a special field, the current action is completed
+        ::when( player_pos == 4 ) { tau {= player_pos = 5, special_field_3 = true =}; };
+        ::when( player_pos == 5 ) { tau {= player_pos = 4, special_field_4 = true =}; };
+        ::when(
+            player_pos != 1 &
+            player_pos != 2 &
+            player_pos != 4 &
+            player_pos != 5) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };     // if we are not on a special field, the current action is completed
     };
 }

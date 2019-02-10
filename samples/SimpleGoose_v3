@@ -1,0 +1,100 @@
+// Simple Goose v3: First half of the game field
+
+// Variables
+int player_pos = 0;
+int number_of_actions = 0;
+int number_of_internal_steps = 0;
+bool special_field_1 = false;
+bool special_field_2 = false;
+bool special_field_3 = false;
+bool special_field_4 = false;
+bool special_field_5 = false;
+bool special_field_6 = false;
+
+int dice_outcome;
+bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
+
+// Constants
+int goal = 22;      // the goal field
+int bound = 2;      // to make the model finite
+
+// Exercise 2
+//property exercise2 = E F player_pos == goal && round_complete;
+
+// Exercise 3 (finds 1 winning path)
+property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+
+// Exercise 4 (does not find any paths that get stuck)
+//property exercise4 = (E F((
+//    (special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||
+//    (special_field_2 && (E X(!E ((!special_field_2) U round_complete)))) ||
+//    (special_field_3 && (E X(!E ((!special_field_3) U round_complete)))) ||
+//    (special_field_4 && (E X(!E ((!special_field_4) U round_complete)))) ||
+//    (special_field_5 && (E X(!E ((!special_field_5) U round_complete)))) ||
+//    (special_field_6 && (E X(!E ((!special_field_6) U round_complete))))
+//) && number_of_internal_steps > 1));
+
+while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps < 2){
+    tau {=
+        special_field_1 = false,
+        special_field_2 = false,
+        special_field_3 = false,
+        special_field_4 = false,
+        special_field_5 = false,
+        special_field_6 = false,
+        number_of_internal_steps = number_of_internal_steps + 1 =};
+
+    // Roll the die when the current round is completed, otherwise keep dice outcome from previous cycle and
+    // do bounce back and special field movements again without throwing new die
+    alt{
+        ::when( !round_complete) { tau };
+
+        // normal dice roll
+        ::when( round_complete & number_of_actions >= 0 ) {
+             alt{
+                   ::tau {= dice_outcome = 1 =};
+                   ::tau {= dice_outcome = 2 =};
+                   ::tau {= dice_outcome = 3 =};
+                   ::tau {= dice_outcome = 4 =};
+                   ::tau {= dice_outcome = 5 =};
+                   ::tau {= dice_outcome = 6 =};
+                   ::tau {= dice_outcome = 7 =};
+                   ::tau {= dice_outcome = 8 =};
+                   ::tau {= dice_outcome = 9 =};
+                   ::tau {= dice_outcome = 10 =};
+                   ::tau {= dice_outcome = 11 =};
+                   ::tau {= dice_outcome = 12 =};
+             };
+         };
+    };
+
+    alt{
+        // the previous round was finished and a new dice has been thrown
+        ::when( round_complete ) { tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =}; };
+        ::when( !round_complete ) { tau; };
+    };
+
+
+    // Bounce back from goal
+    if(player_pos > goal)
+      { tau{= player_pos = (goal - (player_pos - goal)) =}; }
+    else
+      { tau; };
+
+    alt{
+        // Buggy game logic example, in order to win, player must not go to field 12, 11, 20 or 22
+        ::when( player_pos == 5 ) { tau {= player_pos = player_pos - dice_outcome, special_field_1 = true =}; };
+        ::when( player_pos == 6 ) { tau {= player_pos = 12, special_field_2 = true =}; };
+        ::when( player_pos == 9 ) { tau {= player_pos = player_pos - dice_outcome, special_field_3 = true =}; };
+        ::when( player_pos == 14 ) { tau {= player_pos = player_pos + dice_outcome, special_field_4 = true =}; };
+        ::when( player_pos == 18 ) { tau {= player_pos = 23, round_complete = true, number_of_internal_steps = 0, special_field_5 = true =}; };
+        ::when( player_pos == 23 ) { tau {= player_pos = player_pos - dice_outcome, special_field_6 = true =}; };
+        ::when(
+            player_pos != 5 &
+            player_pos != 6 &
+            player_pos != 9 &
+            player_pos != 14 &
+            player_pos != 18 &
+            player_pos != 23) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };     // if we are not on a special field, the current action is completed
+    };
+}

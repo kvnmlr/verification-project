@@ -38,7 +38,7 @@ class ProgState extends State {
 	 */
 	@Override
 	public String toString() {
-		return "State(" + location + "," + ev + ")";
+		return "<" /*+ location + ","*/ + ev + ">";
 	}
 
 	/* (non-Javadoc)

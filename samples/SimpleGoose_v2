@@ -1,0 +1,93 @@
+// Simple Goose v2: Simplified game rules with full dice, works with Exercise 2, 3 and 4
+
+// Variables
+int player_pos = 0;
+int number_of_actions = 0;
+int number_of_internal_steps = 0;
+bool special_field_1 = false;
+bool special_field_2 = false;
+bool special_field_3 = false;
+bool special_field_4 = false;
+
+int dice_outcome;
+bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
+
+// Constants
+int goal = 33;      // the goal field
+int bound = 3;      // to make the model finite
+
+// Exercise 2
+//property exercise2 = E F player_pos == goal && round_complete;
+
+// Exercise 3 (finds 2 winning paths if normal dice, finds no winning path if first dice is a 12)
+property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+
+// Exercise 4 (finds 249 path that get stuck with normal dice, finds one path that gets stuck if first dice is a 12)
+//property exercise4 = (E F((
+//    (special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||
+//    (special_field_2 && (E X(!E ((!special_field_2) U round_complete)))) ||
+//    (special_field_3 && (E X(!E ((!special_field_3) U round_complete)))) ||
+//    (special_field_4 && (E X(!E ((!special_field_4) U round_complete))))
+//) && number_of_internal_steps > 1));
+
+while( player_pos != goal & number_of_actions <= bound & number_of_internal_steps < 2){
+    tau {=
+        special_field_1 = false,
+        special_field_2 = false,
+        special_field_3 = false,
+        special_field_4 = false,
+        number_of_internal_steps = number_of_internal_steps + 1 =};
+
+    // Roll the die when the current round is completed, otherwise keep dice outcome from previous cycle and
+    // do bounce back and special field movements again without throwing new die
+    alt{
+        ::when( !round_complete) { tau };
+
+        // when we force a 12 as first dice result, the game cannot be won because of the buggy game logic (see below)
+        //::when( round_complete & number_of_actions == 0 ) { tau {= dice_outcome = 12 =}; };
+
+        // normal dice roll
+        ::when( round_complete & number_of_actions >= 0 ) {
+             alt{
+                   ::tau {= dice_outcome = 1 =};
+                   ::tau {= dice_outcome = 2 =};
+                   ::tau {= dice_outcome = 3 =};
+                   ::tau {= dice_outcome = 4 =};
+                   ::tau {= dice_outcome = 5 =};
+                   ::tau {= dice_outcome = 6 =};
+                   ::tau {= dice_outcome = 7 =};
+                   ::tau {= dice_outcome = 8 =};
+                   ::tau {= dice_outcome = 9 =};
+                   ::tau {= dice_outcome = 10 =};
+                   ::tau {= dice_outcome = 11 =};
+                   ::tau {= dice_outcome = 12 =};
+             };
+         };
+    };
+
+    alt{
+        // the previous round was finished and a new dice has been thrown
+        ::when( round_complete ) { tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =}; };
+        ::when( !round_complete ) { tau };
+    };
+
+
+    // Bounce back from goal
+    if(player_pos > goal)
+      { tau{= player_pos = (goal - (player_pos - goal)) =}; }
+    else
+      { tau };
+
+    alt{
+        // Buggy game logic example, in order to win, player must not go to field 12, 11, 20 or 22
+        ::when( player_pos == 12 ) { tau {= player_pos = 11, special_field_1 = true =}; };
+        ::when( player_pos == 11 ) { tau {= player_pos = 12, special_field_2 = true =}; };
+        ::when( player_pos == 22 ) { tau {= player_pos = 20, special_field_3 = true =}; };
+        ::when( player_pos == 20 ) { tau {= player_pos = 22, special_field_4 = true =}; };
+        ::when(
+            player_pos != 12 &
+            player_pos != 11 &
+            player_pos != 22 &
+            player_pos != 20) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };     // if we are not on a special field, the current action is completed
+    };
+}
