@@ -4,13 +4,15 @@
 int player_pos = 0;
 int number_of_actions = 0;
 int number_of_internal_steps = 0;
+int number_of_freethrows = 0;       // used to avoid the model to get stuck on infinite free throws on field 31
+int dice_outcome;
+
 bool special_field_1 = false;
 bool special_field_3 = false;
 bool special_field_4 = false;
 bool special_field_5 = false;
 bool special_field_7 = false;
 bool special_field_8 = false;
-bool special_field_9 = false;
 bool special_field_10 = false;
 bool special_field_11 = false;
 bool special_field_12 = false;
@@ -21,12 +23,11 @@ bool special_field_19 = false;
 
 //bool special_field_2 = false;     not necessary, go directly to 12
 //bool special_field_6 = false;     not necessary, miss the next turn
+//bool special_field_9 = false;     not necessary, throw dice again
 //bool special_field_13 = false;    not necessary, go directly to 30
 //bool special_field_16 = false;    not necessary, miss next two turns
 //bool special_field_18 = false;    not necessary, go directly to 0
 //bool special_at_a_point = false;
-
-int dice_outcome;
 //bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
@@ -37,27 +38,26 @@ int bound = 5;      // to make the model finite
 //property exercise2 = E F player_pos == goal && number_of_actions <= bound && number_of_internal_steps == 0;
 
 // Exercise 3 (finds 1 winning path)
-property exercise3 = E F player_pos == goal && number_of_actions <= bound && number_of_internal_steps == 0;
+//property exercise3 = E F player_pos == goal && number_of_actions <= bound && number_of_internal_steps == 0;
 
 // Exercise 4 (does not find any paths that get stuck)
-//property exercise4 = (E F((
-//    (special_field_1 && (E X(!E ((!special_field_1) U number_of_internal_steps == 0)))) ||
-//    (special_field_3 && (E X(!E ((!special_field_3) U number_of_internal_steps == 0)))) ||
-//    (special_field_4 && (E X(!E ((!special_field_4) U number_of_internal_steps == 0)))) ||
-//    (special_field_5 && (E X(!E ((!special_field_5) U number_of_internal_steps == 0)))) ||
-//    (special_field_7 && (E X(!E ((!special_field_7) U number_of_internal_steps == 0)))) ||
-//    (special_field_8 && (E X(!E ((!special_field_8) U number_of_internal_steps == 0)))) ||
-//    (special_field_9 && (E X(!E ((!special_field_9) U number_of_internal_steps == 0)))) ||
-//    (special_field_10 && (E X(!E ((!special_field_10) U number_of_internal_steps == 0)))) ||
-//    (special_field_11 && (E X(!E ((!special_field_11) U number_of_internal_steps == 0)))) ||
-//    (special_field_12 && (E X(!E ((!special_field_12) U number_of_internal_steps == 0)))) ||
-//    (special_field_14 && (E X(!E ((!special_field_14) U number_of_internal_steps == 0)))) ||
-//    (special_field_15 && (E X(!E ((!special_field_15) U number_of_internal_steps == 0)))) ||
-//    (special_field_17 && (E X(!E ((!special_field_17) U number_of_internal_steps == 0)))) ||
-//    (special_field_19 && (E X(!E ((!special_field_19) U number_of_internal_steps == 0))))
-//) && number_of_internal_steps > 1));
+property exercise4 = (E F((
+    (special_field_1 && (E X(!E ((!special_field_1) U number_of_internal_steps == 0)))) ||
+    (special_field_3 && (E X(!E ((!special_field_3) U number_of_internal_steps == 0)))) ||
+    (special_field_4 && (E X(!E ((!special_field_4) U number_of_internal_steps == 0)))) ||
+    (special_field_5 && (E X(!E ((!special_field_5) U number_of_internal_steps == 0)))) ||
+    (special_field_7 && (E X(!E ((!special_field_7) U number_of_internal_steps == 0)))) ||
+    (special_field_8 && (E X(!E ((!special_field_8) U number_of_internal_steps == 0)))) ||
+    (special_field_10 && (E X(!E ((!special_field_10) U number_of_internal_steps == 0)))) ||
+    (special_field_11 && (E X(!E ((!special_field_11) U number_of_internal_steps == 0)))) ||
+    (special_field_12 && (E X(!E ((!special_field_12) U number_of_internal_steps == 0)))) ||
+    (special_field_14 && (E X(!E ((!special_field_14) U number_of_internal_steps == 0)))) ||
+    (special_field_15 && (E X(!E ((!special_field_15) U number_of_internal_steps == 0)))) ||
+    (special_field_17 && (E X(!E ((!special_field_17) U number_of_internal_steps == 0)))) ||
+    (special_field_19 && (E X(!E ((!special_field_19) U number_of_internal_steps == 0))))
+) && number_of_internal_steps > 1));
 
-while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps < 3){
+while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps < 3 & number_of_freethrows < 2){
     tau {=
         special_field_1 = false,
         special_field_3 = false,
@@ -65,7 +65,6 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
         special_field_5 = false,
         special_field_7 = false,
         special_field_8 = false,
-        special_field_9 = false,
         special_field_10 = false,
         special_field_11 = false,
         special_field_12 = false,
@@ -88,9 +87,9 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
                    //::tau {= dice_outcome = 4, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 4) =};
                    ::tau {= dice_outcome = 5, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 5) =};
                    //::tau {= dice_outcome = 6, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 6) =};
-                   ::tau {= dice_outcome = 7, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 7) =};
-                   ::tau {= dice_outcome = 8, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 8) =};
-                   ::tau {= dice_outcome = 9, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 9) =};
+                   //::tau {= dice_outcome = 7, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 7) =};
+                   //::tau {= dice_outcome = 8, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 8) =};
+                   //::tau {= dice_outcome = 9, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 9) =};
                    ::tau {= dice_outcome = 10, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 10) =};
                    ::tau {= dice_outcome = 11, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 11) =};
                    ::tau {= dice_outcome = 12, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 12) =};
@@ -113,13 +112,13 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
         ::when( player_pos == 19 ) { tau {= number_of_internal_steps = 0 =}; };
         ::when( player_pos == 23 ) { tau {= player_pos = player_pos - dice_outcome, special_field_7 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 27 ) { tau {= player_pos = player_pos - dice_outcome, special_field_8 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
-        ::when( player_pos == 31 ) { tau {= special_field_9 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 31 ) { tau {= number_of_internal_steps = 0, number_of_actions = number_of_actions - 1, number_of_freethrows = number_of_freethrows + 1 =}; };  // Go on as normal but do not count the next dice throw as an action
         ::when( player_pos == 32 ) { tau {= player_pos = player_pos + dice_outcome, special_field_10 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 36 ) { tau {= player_pos = player_pos + dice_outcome, special_field_11 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 41 ) { tau {= player_pos = player_pos - dice_outcome, special_field_12 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 42 ) { tau {= player_pos = 30, number_of_internal_steps = 0 =}; };
         ::when( player_pos == 45 ) { tau {= player_pos = player_pos - dice_outcome, special_field_14 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
-        ::when( player_pos == 50 ) { tau {= special_field_15 = true =}; };
+        ::when( player_pos == 50 ) { tau {= player_pos = player_pos + dice_outcome, special_field_15 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 52 ) { tau {= number_of_internal_steps = 0 =}; };
         ::when( player_pos == 54 ) { tau {= player_pos = player_pos - dice_outcome, special_field_17 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 58 ) { tau {= player_pos = 0, number_of_internal_steps = 0 =}; };
