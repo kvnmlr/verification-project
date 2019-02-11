@@ -27,34 +27,34 @@ bool special_field_19 = false;
 //bool special_at_a_point = false;
 
 int dice_outcome;
-bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
+//bool round_complete = true;    // lock, only true in states with final player position (i.e. after bounce and special fields)
 
 // Constants
 int goal = 63;      // the goal field
-int bound = 6;      // to make the model finite
+int bound = 5;      // to make the model finite
 
 // Exercise 2
-//property exercise2 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+//property exercise2 = E F player_pos == goal && number_of_actions <= bound && number_of_internal_steps == 0;
 
 // Exercise 3 (finds 1 winning path)
-property exercise3 = E F player_pos == goal && number_of_actions <= bound && round_complete;
+property exercise3 = E F player_pos == goal && number_of_actions <= bound && number_of_internal_steps == 0;
 
 // Exercise 4 (does not find any paths that get stuck)
 //property exercise4 = (E F((
-//    (special_field_1 && (E X(!E ((!special_field_1) U round_complete)))) ||
-//    (special_field_3 && (E X(!E ((!special_field_3) U round_complete)))) ||
-//    (special_field_4 && (E X(!E ((!special_field_4) U round_complete)))) ||
-//    (special_field_5 && (E X(!E ((!special_field_5) U round_complete)))) ||
-//    (special_field_7 && (E X(!E ((!special_field_7) U round_complete)))) ||
-//    (special_field_8 && (E X(!E ((!special_field_8) U round_complete)))) ||
-//    (special_field_9 && (E X(!E ((!special_field_9) U round_complete)))) ||
-//    (special_field_10 && (E X(!E ((!special_field_10) U round_complete)))) ||
-//    (special_field_11 && (E X(!E ((!special_field_11) U round_complete)))) ||
-//    (special_field_12 && (E X(!E ((!special_field_12) U round_complete)))) ||
-//    (special_field_14 && (E X(!E ((!special_field_14) U round_complete)))) ||
-//    (special_field_15 && (E X(!E ((!special_field_15) U round_complete)))) ||
-//    (special_field_17 && (E X(!E ((!special_field_17) U round_complete)))) ||
-//    (special_field_19 && (E X(!E ((!special_field_19) U round_complete))))
+//    (special_field_1 && (E X(!E ((!special_field_1) U number_of_internal_steps == 0)))) ||
+//    (special_field_3 && (E X(!E ((!special_field_3) U number_of_internal_steps == 0)))) ||
+//    (special_field_4 && (E X(!E ((!special_field_4) U number_of_internal_steps == 0)))) ||
+//    (special_field_5 && (E X(!E ((!special_field_5) U number_of_internal_steps == 0)))) ||
+//    (special_field_7 && (E X(!E ((!special_field_7) U number_of_internal_steps == 0)))) ||
+//    (special_field_8 && (E X(!E ((!special_field_8) U number_of_internal_steps == 0)))) ||
+//    (special_field_9 && (E X(!E ((!special_field_9) U number_of_internal_steps == 0)))) ||
+//    (special_field_10 && (E X(!E ((!special_field_10) U number_of_internal_steps == 0)))) ||
+//    (special_field_11 && (E X(!E ((!special_field_11) U number_of_internal_steps == 0)))) ||
+//    (special_field_12 && (E X(!E ((!special_field_12) U number_of_internal_steps == 0)))) ||
+//    (special_field_14 && (E X(!E ((!special_field_14) U number_of_internal_steps == 0)))) ||
+//    (special_field_15 && (E X(!E ((!special_field_15) U number_of_internal_steps == 0)))) ||
+//    (special_field_17 && (E X(!E ((!special_field_17) U number_of_internal_steps == 0)))) ||
+//    (special_field_19 && (E X(!E ((!special_field_19) U number_of_internal_steps == 0))))
 //) && number_of_internal_steps > 1));
 
 while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps < 3){
@@ -72,39 +72,31 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
         special_field_14 = false,
         special_field_15 = false,
         special_field_17 = false,
-        special_field_19 = false,
-        number_of_internal_steps = number_of_internal_steps + 1 =};
+        special_field_19 = false =};
 
     // Roll the die when the current round is completed, otherwise keep dice outcome from previous cycle and
     // do bounce back and special field movements again without throwing new die
     alt{
-        ::when( !round_complete) { tau };
+        ::when( !number_of_internal_steps == 0) { tau };
 
         // normal dice roll, we can get 20 paths without having all dice activated
-        ::when( round_complete & number_of_actions >= 0 ) {
+        ::when( number_of_internal_steps == 0 & number_of_actions >= 0 ) {
              alt{
-                   //::tau {= dice_outcome = 1 =};
-                   //::tau {= dice_outcome = 2 =};
-                   ::tau {= dice_outcome = 3 =};
-                   //::tau {= dice_outcome = 4 =};
-                   ::tau {= dice_outcome = 5 =};
-                   //::tau {= dice_outcome = 6 =};
-                   //::tau {= dice_outcome = 7 =};
-                   //::tau {= dice_outcome = 8 =};
-                   ::tau {= dice_outcome = 9 =};
-                   //::tau {= dice_outcome = 10 =};
-                   ::tau {= dice_outcome = 11 =};
-                   //::tau {= dice_outcome = 12 =};
+                   //::tau {= dice_outcome = 1, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 1) =};
+                   //::tau {= dice_outcome = 2, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 2) =};
+                   ::tau {= dice_outcome = 3, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 3) =};
+                   //::tau {= dice_outcome = 4, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 4) =};
+                   ::tau {= dice_outcome = 5, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 5) =};
+                   //::tau {= dice_outcome = 6, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 6) =};
+                   ::tau {= dice_outcome = 7, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 7) =};
+                   ::tau {= dice_outcome = 8, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 8) =};
+                   ::tau {= dice_outcome = 9, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 9) =};
+                   ::tau {= dice_outcome = 10, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 10) =};
+                   ::tau {= dice_outcome = 11, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 11) =};
+                   ::tau {= dice_outcome = 12, number_of_actions = number_of_actions + 1, player_pos = (player_pos + 12) =};
              };
          };
     };
-
-    alt{
-        // the previous round was finished and a new dice has been thrown
-        ::when( round_complete ) { tau {= round_complete = false, number_of_actions = number_of_actions + 1, player_pos = (player_pos + dice_outcome) =}; };
-        ::when( !round_complete ) { tau; };
-    };
-
 
     // Bounce back from goal
     if(player_pos > goal)
@@ -113,25 +105,25 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
       { tau; };
 
     alt{
-        ::when( player_pos == 5 ) { tau {= player_pos = player_pos - dice_outcome, special_field_1 = true =}; };
-        ::when( player_pos == 6 ) { tau {= player_pos = 12, round_complete = true, number_of_internal_steps = 0 =}; };
-        ::when( player_pos == 9 ) { tau {= player_pos = player_pos - dice_outcome, special_field_3 = true =}; };
-        ::when( player_pos == 14 ) { tau {= player_pos = player_pos + dice_outcome, special_field_4 = true =}; };
-        ::when( player_pos == 18 ) { tau {= player_pos = player_pos + dice_outcome, special_field_5 = true =}; };
-        ::when( player_pos == 19 ) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };
-        ::when( player_pos == 23 ) { tau {= player_pos = player_pos - dice_outcome, special_field_7 = true =}; };
-        ::when( player_pos == 27 ) { tau {= player_pos = player_pos - dice_outcome, special_field_8 = true =}; };
-        ::when( player_pos == 31 ) { tau {= special_field_9 = true =}; };
-        ::when( player_pos == 32 ) { tau {= player_pos = player_pos + dice_outcome, special_field_10 = true =}; };
-        ::when( player_pos == 36 ) { tau {= player_pos = player_pos + dice_outcome, special_field_11 = true =}; };
-        ::when( player_pos == 41 ) { tau {= player_pos = player_pos - dice_outcome, special_field_12 = true =}; };
-        ::when( player_pos == 42 ) { tau {= player_pos = 30, round_complete = true, number_of_internal_steps = 0 =}; };
-        ::when( player_pos == 45 ) { tau {= player_pos = player_pos - dice_outcome, special_field_14 = true =}; };
+        ::when( player_pos == 5 ) { tau {= player_pos = player_pos - dice_outcome, special_field_1 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 6 ) { tau {= player_pos = 12, number_of_internal_steps = 0 =}; };
+        ::when( player_pos == 9 ) { tau {= player_pos = player_pos - dice_outcome, special_field_3 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 14 ) { tau {= player_pos = player_pos + dice_outcome, special_field_4 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 18 ) { tau {= player_pos = player_pos + dice_outcome, special_field_5 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 19 ) { tau {= number_of_internal_steps = 0 =}; };
+        ::when( player_pos == 23 ) { tau {= player_pos = player_pos - dice_outcome, special_field_7 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 27 ) { tau {= player_pos = player_pos - dice_outcome, special_field_8 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 31 ) { tau {= special_field_9 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 32 ) { tau {= player_pos = player_pos + dice_outcome, special_field_10 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 36 ) { tau {= player_pos = player_pos + dice_outcome, special_field_11 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 41 ) { tau {= player_pos = player_pos - dice_outcome, special_field_12 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 42 ) { tau {= player_pos = 30, number_of_internal_steps = 0 =}; };
+        ::when( player_pos == 45 ) { tau {= player_pos = player_pos - dice_outcome, special_field_14 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
         ::when( player_pos == 50 ) { tau {= special_field_15 = true =}; };
-        ::when( player_pos == 52 ) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };
-        ::when( player_pos == 54 ) { tau {= player_pos = player_pos - dice_outcome, special_field_17 = true =}; };
-        ::when( player_pos == 58 ) { tau {= player_pos = 0, round_complete = true, number_of_internal_steps = 0 =}; };
-        ::when( player_pos == 59 ) { tau {= player_pos = player_pos + dice_outcome, special_field_19 = true =}; };
+        ::when( player_pos == 52 ) { tau {= number_of_internal_steps = 0 =}; };
+        ::when( player_pos == 54 ) { tau {= player_pos = player_pos - dice_outcome, special_field_17 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
+        ::when( player_pos == 58 ) { tau {= player_pos = 0, number_of_internal_steps = 0 =}; };
+        ::when( player_pos == 59 ) { tau {= player_pos = player_pos + dice_outcome, special_field_19 = true, number_of_internal_steps = number_of_internal_steps + 1 =}; };
 
         ::when(
             player_pos != 5 &
@@ -152,6 +144,6 @@ while( player_pos < goal & number_of_actions <= bound & number_of_internal_steps
             player_pos != 52 &
             player_pos != 54 &
             player_pos != 58 &
-            player_pos != 59) { tau {= round_complete = true, number_of_internal_steps = 0 =}; };     // if we are not on a special field, the current action is completed
+            player_pos != 59) { tau {= number_of_internal_steps = 0 =}; };     // if we are not on a special field, the current action is completed
     };
 }
